@@ -72,7 +72,6 @@ func (b *Bcash) BcashGetBlock(hash string) bch.Block {
 	}
 	json.Unmarshal([]byte(res), &block)
 	return block
-
 }
 
 /**

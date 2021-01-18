@@ -50,7 +50,7 @@ func (b *Bitcoin) BtcBroadcast(txData string, signatureId string) common.Transac
  *
  * @return the btc info
  */
-func (b *Bitcoin) btcGetCurrentBlock() btc.Info {
+func (b *Bitcoin) BtcGetCurrentBlock() btc.Info {
 	url := "/v3/bitcoin/info"
 	var info btc.Info
 	res, err := sender.SendGet(url, nil)

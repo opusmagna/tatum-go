@@ -18,13 +18,13 @@ type Tx struct {
 	 * @type {number}
 	 * @memberof BtcTx
 	 */
-	Fee uint64
+	Fee uint32
 	/**
 	 *
 	 * @type {number}
 	 * @memberof BtcTx
 	 */
-	Rate uint64
+	Rate uint32
 	/**
 	 *
 	 * @type {number}
@@ -36,7 +36,7 @@ type Tx struct {
 	 * @type {number}
 	 * @memberof BtcTx
 	 */
-	Height uint64
+	Height uint32
 	/**
 	 * Hash of the block this transaction belongs to.
 	 * @type {string}
@@ -54,13 +54,13 @@ type Tx struct {
 	 * @type {number}
 	 * @memberof BtcTx
 	 */
-	Index int
+	Index uint32
 	/**
 	 * Index of the transaction.
 	 * @type {number}
 	 * @memberof BtcTx
 	 */
-	Version int
+	Version uint32
 	/**
 	 *
 	 * @type {Array<BtcTxInputs>}

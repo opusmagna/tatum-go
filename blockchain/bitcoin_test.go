@@ -17,7 +17,7 @@ func TestBtcBroadcast(t *testing.T) {
 func TestBtcGetCurrentBlock(t *testing.T) {
 
 	bitcoin := Bitcoin{}
-	info := bitcoin.btcGetCurrentBlock()
+	info := bitcoin.BtcGetCurrentBlock()
 	fmt.Println(info.Chain)
 	fmt.Println(info.Blocks)
 	fmt.Println(info.Headers)

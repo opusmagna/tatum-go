@@ -16,7 +16,7 @@ type Ethereum struct {
 /**
  * For more details, see <a href="https://tatum.io/apidoc#operation/EthBroadcast" target="_blank">Tatum API documentation</a>
  */
-func (e *Ethereum) EthBroadcast(txData string, signatureId string) common.TransactionHash {
+func (e *Ethereum) EthBroadcast(txData string, signatureId string) *common.TransactionHash {
 	url := "/v3/ethereum/broadcast"
 
 	payload := make(map[string]interface{})
@@ -28,7 +28,7 @@ func (e *Ethereum) EthBroadcast(txData string, signatureId string) common.Transa
 	requestJSON, err := json.Marshal(payload)
 	if err != nil {
 		fmt.Println(err.Error())
-		return common.TransactionHash{}
+		return nil
 	}
 	fmt.Println(string(requestJSON))
 
@@ -39,7 +39,7 @@ func (e *Ethereum) EthBroadcast(txData string, signatureId string) common.Transa
 		json.Unmarshal([]byte(res), &result)
 		txHash.TxId = fmt.Sprint(result["txId"])
 	}
-	return txHash
+	return &txHash
 }
 
 /**
@@ -77,17 +77,17 @@ func (e *Ethereum) EthGetCurrentBlock() uint32 {
 /**
  * For more details, see <a href="https://tatum.io/apidoc#operation/EthGetBlock" target="_blank">Tatum API documentation</a>
  */
-func (e *Ethereum) EthGetBlock(hash string) eth.Block {
+func (e *Ethereum) EthGetBlock(hash string) *eth.Block {
 	url := "/v3/ethereum/block/" + hash
 	var block eth.Block
 	res, err := sender.SendGet(url, nil)
 	fmt.Println(res)
 	if err != nil {
 		fmt.Println(err.Error())
-		return block
+		return nil
 	}
 	json.Unmarshal([]byte(res), &block)
-	return block
+	return &block
 }
 
 /**
@@ -109,7 +109,7 @@ func (e *Ethereum) EthGetAccountBalance(address string) decimal.Decimal {
 /**
  * For more details, see <a href="https://tatum.io/apidoc#operation/EthErc20GetBalance" target="_blank">Tatum API documentation</a>
  */
-func (e *Ethereum) EthGetAccountErc20Address(address string, contractAddress string) common.Balance {
+func (e *Ethereum) EthGetAccountErc20Address(address string, contractAddress string) *common.Balance {
 	url, _ := url.Parse("/v3/ethereum/account/balance/erc20/" + address)
 	q := url.Query()
 	q.Add("contractAddress", contractAddress)
@@ -120,32 +120,32 @@ func (e *Ethereum) EthGetAccountErc20Address(address string, contractAddress str
 	res, err := sender.SendGet(url.String(), nil)
 	if err != nil {
 		fmt.Println(err.Error())
-		return balance
+		return nil
 	}
 	json.Unmarshal([]byte(res), &balance)
-	return balance
+	return &balance
 }
 
 /**
  * For more details, see <a href="https://tatum.io/apidoc#operation/EthGetTransaction" target="_blank">Tatum API documentation</a>
  */
-func (e *Ethereum) EthGetTransaction(hash string) eth.Tx {
+func (e *Ethereum) EthGetTransaction(hash string) *eth.Tx {
 	url := "/v3/ethereum/transaction/" + hash
 	var tx eth.Tx
 	res, err := sender.SendGet(url, nil)
 	if err != nil {
 		fmt.Println(err.Error())
-		return tx
+		return nil
 	}
 	json.Unmarshal([]byte(res), &tx)
-	return tx
+	return &tx
 
 }
 
 /**
  * For more details, see <a href="https://tatum.io/apidoc#operation/EthGetTransactionByAddress" target="_blank">Tatum API documentation</a>
  */
-func (e *Ethereum) EthGetAccountTransactions(address string, pageSize uint32, offset uint32) []eth.Tx {
+func (e *Ethereum) EthGetAccountTransactions(address string, pageSize uint32, offset uint32) *[]eth.Tx {
 	url, _ := url.Parse("/v3/ethereum/account/transaction/" + address)
 	q := url.Query()
 	q.Add("offset", strconv.FormatUint(uint64(offset), 10))
@@ -157,8 +157,8 @@ func (e *Ethereum) EthGetAccountTransactions(address string, pageSize uint32, of
 	res, err := sender.SendGet(url.String(), nil)
 	if err != nil {
 		fmt.Println(err.Error())
-		return txs
+		return nil
 	}
 	json.Unmarshal([]byte(res), &txs)
-	return txs
+	return &txs
 }

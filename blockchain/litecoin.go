@@ -16,7 +16,7 @@ type Litecoin struct {
 /**
  * For more details, see <a href="https://tatum.io/apidoc#operation/LtcBroadcast" target="_blank">Tatum API documentation</a>
  */
-func (b *Litecoin) LtcBroadcast(txData string, signatureId string) common.TransactionHash {
+func (b *Litecoin) LtcBroadcast(txData string, signatureId string) *common.TransactionHash {
 	url := "/v3/litecoin/broadcast"
 
 	payload := make(map[string]interface{})
@@ -28,7 +28,7 @@ func (b *Litecoin) LtcBroadcast(txData string, signatureId string) common.Transa
 	requestJSON, err := json.Marshal(payload)
 	if err != nil {
 		fmt.Println(err.Error())
-		return common.TransactionHash{}
+		return nil
 	}
 	fmt.Println(string(requestJSON))
 
@@ -39,29 +39,29 @@ func (b *Litecoin) LtcBroadcast(txData string, signatureId string) common.Transa
 		json.Unmarshal([]byte(res), &result)
 		txHash.TxId = fmt.Sprint(result["txId"])
 	}
-	return txHash
+	return &txHash
 }
 
 /**
  * For more details, see <a href="https://tatum.io/apidoc#operation/LtcGetBlockChainInfo" target="_blank">Tatum API documentation</a>
  */
-func (b *Litecoin) LtcGetCurrentBlock() ltc.Info {
+func (b *Litecoin) LtcGetCurrentBlock() *ltc.Info {
 	url := "/v3/litecoin/info"
 	var info ltc.Info
 	res, err := sender.SendGet(url, nil)
 	fmt.Println(res)
 	if err != nil {
 		fmt.Println(err.Error())
-		return info
+		return nil
 	}
 	json.Unmarshal([]byte(res), &info)
-	return info
+	return &info
 }
 
 /**
  * For more details, see <a href="https://tatum.io/apidoc#operation/LtcGetBlock" target="_blank">Tatum API documentation</a>
  */
-func (b *Litecoin) LtcGetBlock(hash string) ltc.Block {
+func (b *Litecoin) LtcGetBlock(hash string) *ltc.Block {
 	url := "/v3/litecoin/block/" + hash
 
 	var block ltc.Block
@@ -69,46 +69,46 @@ func (b *Litecoin) LtcGetBlock(hash string) ltc.Block {
 	fmt.Println(res)
 	if err != nil {
 		fmt.Println(err.Error())
-		return block
+		return nil
 	}
 	json.Unmarshal([]byte(res), &block)
-	return block
+	return &block
 }
 
 /**
  * For more details, see <a href="https://tatum.io/apidoc#operation/LtcGetBlockHash" target="_blank">Tatum API documentation</a>
  */
-func (b *Litecoin) LtcGetBlockHash(i uint64) common.BlockHash {
+func (b *Litecoin) LtcGetBlockHash(i uint64) *common.BlockHash {
 	url := strings.Join([]string{"/v3/litecoin/block/hash", strconv.FormatUint(i, 10)}, "/")
 	var hash common.BlockHash
 	res, err := sender.SendGet(url, nil)
 	if err != nil {
 		fmt.Println(err.Error())
-		return hash
+		return nil
 	}
 	json.Unmarshal([]byte(res), &hash)
-	return hash
+	return &hash
 }
 
 /**
  * For more details, see <a href="https://tatum.io/apidoc#operation/LtcGetUTXO" target="_blank">Tatum API documentation</a>
  */
-func (b *Litecoin) LtcGetUTXO(hash string, i uint64) ltc.LtcUTXO {
+func (b *Litecoin) LtcGetUTXO(hash string, i uint64) *ltc.LtcUTXO {
 	url := strings.Join([]string{"/v3/litecoin/utxo", hash, strconv.FormatUint(i, 10)}, "/")
 	var utxo ltc.LtcUTXO
 	res, err := sender.SendGet(url, nil)
 	if err != nil {
 		fmt.Println(err.Error())
-		return utxo
+		return nil
 	}
 	json.Unmarshal([]byte(res), &utxo)
-	return utxo
+	return &utxo
 }
 
 /**
  * For more details, see <a href="https://tatum.io/apidoc#operation/LtcGetTxByAddress" target="_blank">Tatum API documentation</a>
  */
-func (b *Litecoin) LtcGetTxForAccount(address string, pageSize uint16, offset uint16) []ltc.Tx {
+func (b *Litecoin) LtcGetTxForAccount(address string, pageSize uint16, offset uint16) *[]ltc.Tx {
 	url, _ := url.Parse("/v3/litecoin/transaction/address/" + address)
 	q := url.Query()
 	q.Add("offset", strconv.FormatUint(uint64(offset), 10))
@@ -120,23 +120,23 @@ func (b *Litecoin) LtcGetTxForAccount(address string, pageSize uint16, offset ui
 	res, err := sender.SendGet(url.String(), nil)
 	if err != nil {
 		fmt.Println(err.Error())
-		return txs
+		return nil
 	}
 	json.Unmarshal([]byte(res), &txs)
-	return txs
+	return &txs
 }
 
 /**
  * For more details, see <a href="https://tatum.io/apidoc#operation/LtcGetRawTransaction" target="_blank">Tatum API documentation</a>
  */
-func (b *Litecoin) LtcGetTransaction(hash string) ltc.Tx {
+func (b *Litecoin) LtcGetTransaction(hash string) *ltc.Tx {
 	url := "/v3/litecoin/transaction/" + hash
 	var tx ltc.Tx
 	res, err := sender.SendGet(url, nil)
 	if err != nil {
 		fmt.Println(err.Error())
-		return tx
+		return nil
 	}
 	json.Unmarshal([]byte(res), &tx)
-	return tx
+	return &tx
 }

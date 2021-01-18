@@ -19,7 +19,7 @@ var sender = &utils.Async{}
 /**
  * For more details, see <a href="https://tatum.io/apidoc#operation/BtcBroadcast" target="_blank">Tatum API documentation</a>
  */
-func (b *Bitcoin) BtcBroadcast(txData string, signatureId string) common.TransactionHash {
+func (b *Bitcoin) BtcBroadcast(txData string, signatureId string) *common.TransactionHash {
 	url := "/v3/bitcoin/broadcast"
 
 	payload := make(map[string]interface{})
@@ -31,7 +31,7 @@ func (b *Bitcoin) BtcBroadcast(txData string, signatureId string) common.Transac
 	requestJSON, err := json.Marshal(payload)
 	if err != nil {
 		fmt.Println(err.Error())
-		return common.TransactionHash{}
+		return nil
 	}
 	fmt.Println(string(requestJSON))
 
@@ -42,7 +42,7 @@ func (b *Bitcoin) BtcBroadcast(txData string, signatureId string) common.Transac
 		json.Unmarshal([]byte(res), &result)
 		txHash.TxId = fmt.Sprint(result["txId"])
 	}
-	return txHash
+	return &txHash
 }
 
 /**
@@ -50,17 +50,17 @@ func (b *Bitcoin) BtcBroadcast(txData string, signatureId string) common.Transac
  *
  * @return the btc info
  */
-func (b *Bitcoin) BtcGetCurrentBlock() btc.Info {
+func (b *Bitcoin) BtcGetCurrentBlock() *btc.Info {
 	url := "/v3/bitcoin/info"
 	var info btc.Info
 	res, err := sender.SendGet(url, nil)
 	fmt.Println(res)
 	if err != nil {
 		fmt.Println(err.Error())
-		return info
+		return nil
 	}
 	json.Unmarshal([]byte(res), &info)
-	return info
+	return &info
 }
 
 /**
@@ -69,7 +69,7 @@ func (b *Bitcoin) BtcGetCurrentBlock() btc.Info {
  * @param hash the hash
  * @return the btc block
  */
-func (b *Bitcoin) BtcGetBlock(hash string) btc.Block {
+func (b *Bitcoin) BtcGetBlock(hash string) *btc.Block {
 	url := "/v3/bitcoin/block/" + hash
 
 	var block btc.Block
@@ -77,46 +77,46 @@ func (b *Bitcoin) BtcGetBlock(hash string) btc.Block {
 	fmt.Println(res)
 	if err != nil {
 		fmt.Println(err.Error())
-		return block
+		return nil
 	}
 	json.Unmarshal([]byte(res), &block)
-	return block
+	return &block
 }
 
 /**
  * For more details, see <a href="https://tatum.io/apidoc#operation/BtcGetBlockHash" target="_blank">Tatum API documentation</a>
  */
-func (b *Bitcoin) BtcGetBlockHash(i uint64) common.BlockHash {
+func (b *Bitcoin) BtcGetBlockHash(i uint64) *common.BlockHash {
 	url := strings.Join([]string{"/v3/bitcoin/block/hash", strconv.FormatUint(i, 10)}, "/")
 	var hash common.BlockHash
 	res, err := sender.SendGet(url, nil)
 	if err != nil {
 		fmt.Println(err.Error())
-		return hash
+		return nil
 	}
 	json.Unmarshal([]byte(res), &hash)
-	return hash
+	return &hash
 }
 
 /**
  * For more details, see <a href="https://tatum.io/apidoc#operation/BtcGetUTXO" target="_blank">Tatum API documentation</a>
  */
-func (b *Bitcoin) BtcGetUTXO(hash string, i uint64) btc.UTXO {
+func (b *Bitcoin) BtcGetUTXO(hash string, i uint64) *btc.UTXO {
 	url := strings.Join([]string{"/v3/bitcoin/utxo", hash, strconv.FormatUint(i, 10)}, "/")
 	var utxo btc.UTXO
 	res, err := sender.SendGet(url, nil)
 	if err != nil {
 		fmt.Println(err.Error())
-		return utxo
+		return nil
 	}
 	json.Unmarshal([]byte(res), &utxo)
-	return utxo
+	return &utxo
 }
 
 /**
  * For more details, see <a href="https://tatum.io/apidoc#operation/BtcGetTxByAddress" target="_blank">Tatum API documentation</a>
  */
-func (b *Bitcoin) BtcGetTxForAccount(address string, pageSize uint16, offset uint16) []btc.Tx {
+func (b *Bitcoin) BtcGetTxForAccount(address string, pageSize uint16, offset uint16) *[]btc.Tx {
 	url, _ := url.Parse("/v3/bitcoin/transaction/address/" + address)
 	q := url.Query()
 	q.Add("offset", strconv.FormatUint(uint64(offset), 10))
@@ -128,23 +128,23 @@ func (b *Bitcoin) BtcGetTxForAccount(address string, pageSize uint16, offset uin
 	res, err := sender.SendGet(url.String(), nil)
 	if err != nil {
 		fmt.Println(err.Error())
-		return txs
+		return nil
 	}
 	json.Unmarshal([]byte(res), &txs)
-	return txs
+	return &txs
 }
 
 /**
  * For more details, see <a href="https://tatum.io/apidoc#operation/BtcGetRawTransaction" target="_blank">Tatum API documentation</a>
  */
-func (b *Bitcoin) BtcGetTransaction(hash string) btc.Tx {
+func (b *Bitcoin) BtcGetTransaction(hash string) *btc.Tx {
 	url := "/v3/bitcoin/transaction/" + hash
 	var tx btc.Tx
 	res, err := sender.SendGet(url, nil)
 	if err != nil {
 		fmt.Println(err.Error())
-		return tx
+		return nil
 	}
 	json.Unmarshal([]byte(res), &tx)
-	return tx
+	return &tx
 }

@@ -29,7 +29,7 @@ func (x *Xlm) XlmGetAccountInfo(account string) *xlm.Sequence {
 /**
  * For more details, see <a href="https://tatum.io/apidoc#operation/XlmBroadcast" target="_blank">Tatum API documentation</a>
  */
-func (x *Xlm) XlmBroadcast(txData string, signatureId string) common.TransactionHash {
+func (x *Xlm) XlmBroadcast(txData string, signatureId string) *common.TransactionHash {
 	url := "/v3/xlm/broadcast"
 
 	payload := make(map[string]interface{})
@@ -41,7 +41,7 @@ func (x *Xlm) XlmBroadcast(txData string, signatureId string) common.Transaction
 	requestJSON, err := json.Marshal(payload)
 	if err != nil {
 		fmt.Println(err.Error())
-		return common.TransactionHash{}
+		return nil
 	}
 	fmt.Println(string(requestJSON))
 
@@ -52,7 +52,7 @@ func (x *Xlm) XlmBroadcast(txData string, signatureId string) common.Transaction
 		json.Unmarshal([]byte(res), &result)
 		txHash.TxId = fmt.Sprint(result["txId"])
 	}
-	return txHash
+	return &txHash
 }
 
 /**

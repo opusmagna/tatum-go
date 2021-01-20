@@ -5,7 +5,7 @@ package vet
  * @export
  * @interface VetTx
  */
-type VetTx struct {
+type Tx struct {
 
 	/**
 	 *

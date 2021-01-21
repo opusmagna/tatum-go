@@ -1,6 +1,8 @@
 package request
 
-import "github.com/tatumio/tatum-go/model/response/ledger"
+import (
+	"github.com/tatumio/tatum-go/model/response/common"
+)
 
 type TransactionFilter struct {
 	Id              string
@@ -13,6 +15,6 @@ type TransactionFilter struct {
 	TransactionCode string
 	SenderNote      string
 	RecipientNote   string
-	OpType          ledger.OperationType
-	TransactionType ledger.TransactionType
+	OpType          common.OperationType
+	TransactionType common.TransactionType
 }

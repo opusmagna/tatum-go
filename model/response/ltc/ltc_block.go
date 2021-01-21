@@ -60,5 +60,5 @@ type Block struct {
 	 * @type {Array<Ltc_tx>}
 	 * @memberof LtcBlock
 	 */
-	Txs []LtcTx
+	Txs []Tx
 }

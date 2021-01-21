@@ -1,6 +1,8 @@
 package request
 
-import "github.com/tatumio/tatum-go/model/response/ledger"
+import (
+	"github.com/tatumio/tatum-go/model/response/common"
+)
 
 type CreateCurrency struct {
 	Name               string
@@ -9,6 +11,6 @@ type CreateCurrency struct {
 	AccountCode        string
 	BasePair           interface{}
 	BaseRate           uint32
-	AccountingCurrency ledger.Fiat
+	AccountingCurrency common.Fiat
 	Customer           CustomerUpdate
 }

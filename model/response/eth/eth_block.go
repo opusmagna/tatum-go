@@ -114,7 +114,7 @@ type Block struct {
 	 * @type {Array<Eth_tx>}
 	 * @memberof EthBlock
 	 */
-	Transactions []EthTx
+	Transactions []Tx
 	/**
 	 * The root of the transaction trie of the block.
 	 * @type {string}

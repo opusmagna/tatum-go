@@ -1,5 +1,7 @@
 package ledger
 
+import "github.com/tatumio/tatum-go/model/response/common"
+
 /**
  *
  * @export
@@ -18,7 +20,7 @@ type MarketValue struct {
 	 * @type {string}
 	 * @memberof MarketValue
 	 */
-	Currency Fiat
+	Currency common.Fiat
 	/**
 	 * Date of validity of rate in UTC.
 	 * @type {number}

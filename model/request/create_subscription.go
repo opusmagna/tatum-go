@@ -1,6 +1,8 @@
 package request
 
-import "github.com/tatumio/tatum-go/model/response/ledger"
+import (
+	"github.com/tatumio/tatum-go/model/response/common"
+)
 
 type SubscriptionAttrAccountBalanceLimit struct {
 	Limit         string
@@ -25,6 +27,6 @@ type SubscriptionAttrCompleteBlockchainTx struct {
 }
 
 type CreateSubscription struct {
-	Type ledger.SubscriptionType
+	Type common.SubscriptionType
 	attr interface{}
 }

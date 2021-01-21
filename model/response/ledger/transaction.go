@@ -1,5 +1,7 @@
 package ledger
 
+import "github.com/tatumio/tatum-go/model/response/common"
+
 /**
  *
  * @export
@@ -54,7 +56,7 @@ type Transaction struct {
 	 * @type {string}
 	 * @memberof Transaction
 	 */
-	OperationType OperationType
+	OperationType common.OperationType
 	/**
 	 * Payment ID defined in payment order by sender.
 	 * @type {string}
@@ -108,5 +110,5 @@ type Transaction struct {
 	 * @type {string}
 	 * @memberof Transaction
 	 */
-	TransactionType TransactionType
+	TransactionType common.TransactionType
 }

@@ -3,6 +3,7 @@ package blockchain
 import (
 	"fmt"
 	"github.com/stretchr/testify/assert"
+	"github.com/tatumio/tatum-go/model/response/btc"
 	"testing"
 )
 
@@ -53,21 +54,22 @@ func TestBtcGetUTXO(t *testing.T) {
 
 func TestBtcGetTxForAccount(t *testing.T) {
 	bitcoin := Bitcoin{}
-	txs := bitcoin.BtcGetTxForAccount("mfbPS2yrNc1fopS9aHwPNJeQHqrpFw9wLW", 4, 0)
-	fmt.Println(len(txs))
+	var txs *[]btc.Tx
+	txs = bitcoin.BtcGetTxForAccount("mfbPS2yrNc1fopS9aHwPNJeQHqrpFw9wLW", 4, 0)
+	fmt.Println(len(*txs))
 
-	assert.Equal(t, "3c28b7a187cf7cde733139b6a49cf646fb430855aa2e5aad90b8711eeb62a562", txs[0].Hash, "they should be equal")
+	assert.Equal(t, "3c28b7a187cf7cde733139b6a49cf646fb430855aa2e5aad90b8711eeb62a562", (*txs)[0].Hash, "they should be equal")
 
-	assert.Equal(t, "mfbPS2yrNc1fopS9aHwPNJeQHqrpFw9wLW", txs[0].Inputs[0].Coin.Address, "they should be equal")
-	assert.Equal(t, uint64(200000), txs[0].Inputs[0].Coin.Value, "they should be equal")
+	assert.Equal(t, "mfbPS2yrNc1fopS9aHwPNJeQHqrpFw9wLW", (*txs)[0].Inputs[0].Coin.Address, "they should be equal")
+	assert.Equal(t, uint64(200000), (*txs)[0].Inputs[0].Coin.Value, "they should be equal")
 
-	assert.Equal(t, "n3XsLoopG4pbQRh2PBRJMqq5tU1zCB62kF", txs[0].Outputs[0].Address, "they should be equal")
-	assert.Equal(t, uint64(50000), txs[0].Outputs[0].Value, "they should be equal")
+	assert.Equal(t, "n3XsLoopG4pbQRh2PBRJMqq5tU1zCB62kF", (*txs)[0].Outputs[0].Address, "they should be equal")
+	assert.Equal(t, uint64(50000), (*txs)[0].Outputs[0].Value, "they should be equal")
 
-	assert.Equal(t, "n3DS6fdDBCva3AKz12YmDSeBnNCF7Tuwvv", txs[0].Outputs[1].Address, "they should be equal")
-	assert.Equal(t, uint64(148000), txs[0].Outputs[1].Value, "they should be equal")
+	assert.Equal(t, "n3DS6fdDBCva3AKz12YmDSeBnNCF7Tuwvv", (*txs)[0].Outputs[1].Address, "they should be equal")
+	assert.Equal(t, uint64(148000), (*txs)[0].Outputs[1].Value, "they should be equal")
 
-	assert.Equal(t, uint64(2000), txs[0].Fee, "they should be equal")
+	assert.Equal(t, uint64(2000), (*txs)[0].Fee, "they should be equal")
 }
 
 func TestBtcGetTransaction(t *testing.T) {

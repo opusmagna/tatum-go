@@ -1,5 +1,7 @@
 package ledger
 
+import "github.com/tatumio/tatum-go/model/response/common"
+
 /**
  *
  * @export
@@ -13,7 +15,7 @@ type Subscription struct {
 	 * @type {string}
 	 * @memberof Subscription
 	 */
-	Type SubscriptionType
+	Type common.SubscriptionType
 	/**
 	 * ID of the subscription.
 	 * @type {string}

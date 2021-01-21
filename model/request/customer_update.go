@@ -1,10 +1,12 @@
 package request
 
-import "github.com/tatumio/tatum-go/model/response/ledger"
+import (
+	"github.com/tatumio/tatum-go/model/response/common"
+)
 
 type CustomerUpdate struct {
 	CustomerCountry    Country
-	AccountingCurrency ledger.Fiat
+	AccountingCurrency common.Fiat
 	ProviderCountry    Country
 	ExternalId         string
 }

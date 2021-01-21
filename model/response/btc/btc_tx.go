@@ -18,7 +18,7 @@ type Tx struct {
 	 * @type {number}
 	 * @memberof BtcTx
 	 */
-	Fee uint32
+	Fee uint64
 	/**
 	 *
 	 * @type {number}

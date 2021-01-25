@@ -142,6 +142,10 @@ func (o *OrderBook) GetTradeById(id string) *ledger.OrderBookResponse {
 		return nil
 	}
 
+	if res == "" {
+		return &orderBook
+	}
+
 	err = json.Unmarshal([]byte(res), &orderBook)
 	if err != nil {
 		fmt.Println(err.Error())

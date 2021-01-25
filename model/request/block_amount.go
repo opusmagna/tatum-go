@@ -1,7 +1,7 @@
 package request
 
 type BlockAmount struct {
-	Amount      string
-	Type        string
-	Description string
+	Amount      *string `json:"amount"`
+	Type        *string `json:"type"`
+	Description *string `json:"description"`
 }

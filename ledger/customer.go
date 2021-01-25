@@ -3,6 +3,7 @@ package ledger
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/go-playground/validator"
 	"github.com/tatumio/tatum-go/model/request"
 	"github.com/tatumio/tatum-go/model/response/common"
 	"github.com/tatumio/tatum-go/model/response/ledger"
@@ -27,7 +28,7 @@ func (c *CustomerLedger) GetCustomer(id string) *ledger.Customer {
 	}
 	var customer ledger.Customer
 	err = json.Unmarshal([]byte(res), &customer)
-	if err == nil {
+	if err != nil {
 		fmt.Println(err.Error())
 		return nil
 	}
@@ -66,7 +67,15 @@ func (c *CustomerLedger) GetAllCustomers(pageSize uint16, offset uint16) *[]ledg
  * For more details, see <a href="https://tatum.io/apidoc#operation/updateCustomer" target="_blank">Tatum API documentation</a>
  */
 func (c *CustomerLedger) UpdateCustomer(id string, data request.CustomerUpdate) *common.Id {
-	//await validateOrReject(data);
+	validate = validator.New()
+	err := validate.Struct(data)
+	if err != nil {
+		for _, err := range err.(validator.ValidationErrors) {
+			fmt.Println(err.Field() + ": should have " + err.Tag() + " " + err.Param())
+			fmt.Println(err.Value())
+		}
+		return nil
+	}
 
 	url, _ := url.Parse("/v3/ledger/customer/" + id)
 

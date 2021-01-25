@@ -3,6 +3,7 @@ package ledger
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/go-playground/validator"
 	"github.com/tatumio/tatum-go/model/request"
 	"github.com/tatumio/tatum-go/model/response/ledger"
 	"net/url"
@@ -18,13 +19,13 @@ type Transaction struct {
 func (t *Transaction) GetTransactionsByReference(reference string) *[]ledger.Transaction {
 	url, _ := url.Parse("/v3/ledger/transaction/reference/" + reference)
 
-	var txs []ledger.Transaction
 	res, err := sender.SendGet(url.String(), nil)
 	if err != nil {
 		fmt.Println(err.Error())
 		return nil
 	}
 
+	var txs []ledger.Transaction
 	err = json.Unmarshal([]byte(res), &txs)
 	if err != nil {
 		fmt.Println(err.Error())
@@ -38,7 +39,15 @@ func (t *Transaction) GetTransactionsByReference(reference string) *[]ledger.Tra
  * For more details, see <a href="https://tatum.io/apidoc#operation/sendTransaction" target="_blank">Tatum API documentation</a>
  */
 func (t *Transaction) StoreTransaction(transaction request.CreateTransaction) *ledger.Reference {
-	//await validateOrReject(transaction);
+	validate = validator.New()
+	err := validate.Struct(transaction)
+	if err != nil {
+		for _, err := range err.(validator.ValidationErrors) {
+			fmt.Println(err.Field() + ": should have " + err.Tag() + " " + err.Param())
+			fmt.Println(err.Value())
+		}
+		return nil
+	}
 
 	url, _ := url.Parse("/v3/ledger/transaction")
 
@@ -68,7 +77,15 @@ func (t *Transaction) StoreTransaction(transaction request.CreateTransaction) *l
  * For more details, see <a href="https://tatum.io/apidoc#operation/getTransactionsByAccountId" target="_blank">Tatum API documentation</a>
  */
 func (t *Transaction) GetTransactionsByAccount(filter request.TransactionFilter, pageSize uint16, offset uint16) *[]ledger.Transaction {
-	//await validateOrReject(filter);
+	validate = validator.New()
+	err := validate.Struct(filter)
+	if err != nil {
+		for _, err := range err.(validator.ValidationErrors) {
+			fmt.Println(err.Field() + ": should have " + err.Tag() + " " + err.Param())
+			fmt.Println(err.Value())
+		}
+		return nil
+	}
 	return getTransactions("/v3/ledger/transaction/account", filter, pageSize, offset)
 }
 
@@ -76,7 +93,15 @@ func (t *Transaction) GetTransactionsByAccount(filter request.TransactionFilter,
  * For more details, see <a href="https://tatum.io/apidoc#operation/getTransactionsByCustomerId" target="_blank">Tatum API documentation</a>
  */
 func (t *Transaction) GetTransactionsByCustomer(filter request.TransactionFilter, pageSize uint16, offset uint16) *[]ledger.Transaction {
-	//await validateOrReject(filter);
+	validate = validator.New()
+	err := validate.Struct(filter)
+	if err != nil {
+		for _, err := range err.(validator.ValidationErrors) {
+			fmt.Println(err.Field() + ": should have " + err.Tag() + " " + err.Param())
+			fmt.Println(err.Value())
+		}
+		return nil
+	}
 	return getTransactions("/v3/ledger/transaction/customer", filter, pageSize, offset)
 }
 
@@ -84,7 +109,15 @@ func (t *Transaction) GetTransactionsByCustomer(filter request.TransactionFilter
  * For more details, see <a href="https://tatum.io/apidoc#operation/getTransactions" target="_blank">Tatum API documentation</a>
  */
 func (t *Transaction) GetTransactionsByLedger(filter request.TransactionFilter, pageSize uint16, offset uint16) *[]ledger.Transaction {
-	//await validateOrReject(filter);
+	validate = validator.New()
+	err := validate.Struct(filter)
+	if err != nil {
+		for _, err := range err.(validator.ValidationErrors) {
+			fmt.Println(err.Field() + ": should have " + err.Tag() + " " + err.Param())
+			fmt.Println(err.Value())
+		}
+		return nil
+	}
 	return getTransactions("/v3/ledger/transaction/ledger", filter, pageSize, offset)
 }
 
@@ -92,7 +125,15 @@ func (t *Transaction) GetTransactionsByLedger(filter request.TransactionFilter, 
  * For more details, see <a href="https://tatum.io/apidoc#operation/getTransactionsByAccountId" target="_blank">Tatum API documentation</a>
  */
 func (t *Transaction) CountTransactionsByAccount(filter request.TransactionFilter) uint64 {
-	//await validateOrReject(filter);
+	validate = validator.New()
+	err := validate.Struct(filter)
+	if err != nil {
+		for _, err := range err.(validator.ValidationErrors) {
+			fmt.Println(err.Field() + ": should have " + err.Tag() + " " + err.Param())
+			fmt.Println(err.Value())
+		}
+		return 0
+	}
 	return countTransactions("/v3/ledger/transaction/account?count=true", filter)
 }
 
@@ -100,7 +141,15 @@ func (t *Transaction) CountTransactionsByAccount(filter request.TransactionFilte
  * For more details, see <a href="https://tatum.io/apidoc#operation/getTransactionsByCustomerId" target="_blank">Tatum API documentation</a>
  */
 func (t *Transaction) CountTransactionsByCustomer(filter request.TransactionFilter) uint64 {
-	//await validateOrReject(filter);
+	validate = validator.New()
+	err := validate.Struct(filter)
+	if err != nil {
+		for _, err := range err.(validator.ValidationErrors) {
+			fmt.Println(err.Field() + ": should have " + err.Tag() + " " + err.Param())
+			fmt.Println(err.Value())
+		}
+		return 0
+	}
 	return countTransactions("/v3/ledger/transaction/customer?count=true", filter)
 }
 
@@ -108,7 +157,15 @@ func (t *Transaction) CountTransactionsByCustomer(filter request.TransactionFilt
  * For more details, see <a href="https://tatum.io/apidoc#operation/getTransactions" target="_blank">Tatum API documentation</a>
  */
 func (t *Transaction) CountTransactionsByLedger(filter request.TransactionFilter) uint64 {
-	//await validateOrReject(filter);
+	validate = validator.New()
+	err := validate.Struct(filter)
+	if err != nil {
+		for _, err := range err.(validator.ValidationErrors) {
+			fmt.Println(err.Field() + ": should have " + err.Tag() + " " + err.Param())
+			fmt.Println(err.Value())
+		}
+		return 0
+	}
 	return countTransactions("/v3/ledger/transaction/ledger?count=true", filter)
 }
 

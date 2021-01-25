@@ -3,6 +3,7 @@ package ledger
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/go-playground/validator"
 	"github.com/tatumio/tatum-go/model/request"
 	"github.com/tatumio/tatum-go/model/response/common"
 	"github.com/tatumio/tatum-go/model/response/ledger"
@@ -17,6 +18,8 @@ type AccountLedger struct {
 
 var sender = &utils.Async{}
 
+var validate *validator.Validate
+
 /**
  * For more details, see <a href="https://tatum.io/apidoc#operation/getAccountByAccountId" target="_blank">Tatum API documentation</a>
  */
@@ -29,7 +32,7 @@ func (a *AccountLedger) GetAccountById(id string) *ledger.Account {
 	}
 	var account ledger.Account
 	err = json.Unmarshal([]byte(res), &account)
-	if err == nil {
+	if err != nil {
 		fmt.Println(err.Error())
 		return nil
 	}
@@ -40,7 +43,15 @@ func (a *AccountLedger) GetAccountById(id string) *ledger.Account {
  * For more details, see <a href="https://tatum.io/apidoc#operation/createAccount" target="_blank">Tatum API documentation</a>
  */
 func (a *AccountLedger) CreateAccount(account request.CreateAccount) *ledger.Account {
-	// TO-DO await validateOrReject(account);
+	validate = validator.New()
+	err := validate.Struct(account)
+	if err != nil {
+		for _, err := range err.(validator.ValidationErrors) {
+			fmt.Println(err.Field() + ": should have " + err.Tag() + " " + err.Param())
+			fmt.Println(err.Value())
+		}
+		return nil
+	}
 
 	url := "/v3/ledger/account"
 
@@ -49,7 +60,7 @@ func (a *AccountLedger) CreateAccount(account request.CreateAccount) *ledger.Acc
 		fmt.Println(err.Error())
 		return nil
 	}
-
+	fmt.Println(string(requestJSON))
 	var accLedger ledger.Account
 	res, err := sender.SendPost(url, requestJSON)
 	if err == nil {
@@ -68,9 +79,8 @@ func (a *AccountLedger) CreateAccount(account request.CreateAccount) *ledger.Acc
  * For more details, see <a href="https://tatum.io/apidoc#operation/createAccountBatch" target="_blank">Tatum API documentation</a>
  */
 func (a *AccountLedger) CreateAccounts(accounts request.CreateAccountsBatch) *[]ledger.Account {
-	//await validateOrReject(accounts);
-
-	// TO-DO await validateOrReject(account);
+	validate = validator.New()
+	err := validate.Struct(accounts)
 
 	url := "/v3/ledger/account/batch"
 
@@ -126,7 +136,8 @@ func (a *AccountLedger) GetBlockedAmountsByAccountId(id string, pageSize uint16,
  * For more details, see <a href="https://tatum.io/apidoc#operation/blockAmount" target="_blank">Tatum API documentation</a>
  */
 func (a *AccountLedger) BlockAmount(id string, block request.BlockAmount) *common.Id {
-	//await validateOrReject(block);
+	validate = validator.New()
+	err := validate.Struct(block)
 
 	url, _ := url.Parse("/v3/ledger/account/block/" + id)
 

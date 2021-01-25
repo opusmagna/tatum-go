@@ -1,5 +1,5 @@
 package request
 
 type CreateAccountsBatch struct {
-	Accounts []CreateAccount
+	Accounts []CreateAccount `json:"accounts" validate:"required"`
 }

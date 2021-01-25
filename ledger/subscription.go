@@ -7,6 +7,7 @@ import (
 	"github.com/tatumio/tatum-go/model/response/common"
 	"github.com/tatumio/tatum-go/model/response/ledger"
 	"net/url"
+	"reflect"
 	"strconv"
 )
 
@@ -17,6 +18,19 @@ type Subcription struct {
  * For more details, see <a href="https://tatum.io/apidoc#operation/createSubscription" target="_blank">Tatum API documentation</a>
  */
 func (s *Subcription) CreateNewSubscription(data request.CreateSubscription) *common.Id {
+	var idRes common.Id
+
+	xType := reflect.TypeOf(data.Attr)
+	if xType.String() != "request.SubscriptionAttrAccountBalanceLimit" &&
+		xType.String() != "request.SubscriptionAttrOffchainWithdrawal" &&
+		xType.String() != "request.SubscriptionAttrTxHistoryReport" &&
+		xType.String() != "request.SubscriptionAttrIncomingBlockchainTx" &&
+		xType.String() != "request.SubscriptionAttrCompleteBlockchainTx" {
+
+		fmt.Errorf("wrong type of attribute")
+		return &idRes
+	}
+
 	url, _ := url.Parse("/v3/subscription")
 
 	requestJSON, err := json.Marshal(data)
@@ -31,7 +45,6 @@ func (s *Subcription) CreateNewSubscription(data request.CreateSubscription) *co
 		return nil
 	}
 
-	var idRes common.Id
 	err = json.Unmarshal([]byte(res), &idRes)
 	if err != nil {
 		fmt.Println(err.Error())

@@ -63,7 +63,7 @@ func (x *Xrp) XrpGetAccountInfo(account string) *xrp.AccountInfo {
 	accountData := result["account_data"].(map[string]interface{})
 	sequence := accountData["Sequence"]
 
-	return &xrp.AccountInfo{LedgerCurrentIndex: ledgerCurrentIndex.(uint32), Sequence: sequence.(uint32)}
+	return &xrp.AccountInfo{LedgerCurrentIndex: uint64(ledgerCurrentIndex.(float64)), Sequence: uint64(sequence.(float64))}
 
 }
 
@@ -108,14 +108,15 @@ func (x *Xrp) XrpGetCurrentLedger() uint64 {
 	}
 	var result map[string]interface{}
 	json.Unmarshal([]byte(res), &result)
-	return result["ledger_index"].(uint64)
+	return uint64(result["ledger_index"].(float64))
 }
 
 /**
  * For more details, see <a href="https://tatum.io/apidoc#operation/XrpGetLedger" target="_blank">Tatum API documentation</a>
  */
 func (x *Xrp) XrpGetLedger(i uint64) string {
-	url := "/v3/xrp/ledger/" + string(i)
+	url := "/v3/xrp/ledger/" + strconv.FormatUint(i, 10)
+	fmt.Println(url)
 	res, err := sender.SendGet(url, nil)
 	if err != nil {
 		fmt.Println(err.Error())
@@ -164,8 +165,8 @@ func (x *Xrp) xrpGetTransaction(hash string) string {
 func (x *Xrp) XrpGetAccountTransactions(address string, min uint32, marker string) string {
 	url, _ := url.Parse("/v3/xrp/account/tx/" + address)
 	q := url.Query()
-	q.Add("min", strconv.FormatUint(uint64(min), 10))
 	q.Add("marker", marker)
+	q.Add("min", strconv.FormatUint(uint64(min), 10))
 	url.RawQuery = q.Encode()
 	fmt.Println(url.String())
 

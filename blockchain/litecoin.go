@@ -54,7 +54,11 @@ func (b *Litecoin) LtcGetCurrentBlock() *ltc.Info {
 		fmt.Println(err.Error())
 		return nil
 	}
-	json.Unmarshal([]byte(res), &info)
+	err = json.Unmarshal([]byte(res), &info)
+	if err != nil {
+		fmt.Println(err.Error())
+		return nil
+	}
 	return &info
 }
 

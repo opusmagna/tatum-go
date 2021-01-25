@@ -45,17 +45,21 @@ func (e *Ethereum) EthBroadcast(txData string, signatureId string) *common.Trans
 /**
  * For more details, see <a href="https://tatum.io/apidoc#operation/EthGetTransactionCount" target="_blank">Tatum API documentation</a>
  */
-func (e *Ethereum) EthGetTransactionsCount(address string) uint32 {
+func (e *Ethereum) EthGetTransactionsCount(address string) uint64 {
 	url := "/v3/ethereum/transaction/count/" + address
 	res, err := sender.SendGet(url, nil)
 	if err != nil {
 		fmt.Println(err.Error())
-		count, err := strconv.Atoi(res)
-		if err == nil {
-			return uint32(count)
-		}
+		return 0
 	}
-	return 0
+
+	count, err := strconv.ParseUint(res, 10, 64)
+	if err != nil {
+		fmt.Println(err.Error())
+		return 0
+	}
+
+	return count
 }
 
 /**
@@ -97,13 +101,24 @@ func (e *Ethereum) EthGetAccountBalance(address string) decimal.Decimal {
 	url := "/v3/ethereum/account/balance/" + address
 	res, err := sender.SendGet(url, nil)
 	if err != nil {
-		fmt.Println(err.Error())
-		balance, err := decimal.NewFromString(res)
-		if err != nil {
-			return balance
-		}
+		fmt.Errorf(err.Error())
+		return decimal.Zero
 	}
-	return decimal.Zero
+
+	var result map[string]interface{}
+	err = json.Unmarshal([]byte(res), &result)
+	if err != nil {
+		fmt.Errorf(err.Error())
+		return decimal.Zero
+	}
+
+	balance, err := decimal.NewFromString(result["balance"].(string))
+	if err != nil {
+		fmt.Errorf(err.Error())
+		return decimal.Zero
+	}
+
+	return balance
 }
 
 /**

@@ -17,7 +17,6 @@ type AccountLedger struct {
 }
 
 var sender = &utils.Async{}
-
 var validate *validator.Validate
 
 /**

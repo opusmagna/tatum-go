@@ -27,7 +27,7 @@ func (c *CustomerLedger) GetCustomer(id string) *ledger.Customer {
 	}
 	var customer ledger.Customer
 	err = json.Unmarshal([]byte(res), &customer)
-	if err == nil {
+	if err != nil {
 		fmt.Println(err.Error())
 		return nil
 	}

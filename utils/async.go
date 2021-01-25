@@ -138,13 +138,15 @@ func (a *Async) SendPost(url string, body []byte) (string, error) {
 	defer asyncResponse.Body.Close()
 	bytes, _ := ioutil.ReadAll(asyncResponse.Body)
 
+	fmt.Println("============================")
 	fmt.Println(string(bytes))
+	fmt.Println("============================")
 
 	return string(bytes), nil
 }
 
 func post(url string, body []byte, rc chan *http.Response) error {
-
+	fmt.Println(string(body))
 	req, err := http.NewRequest("POST", url, bytes.NewReader(body))
 
 	if err != nil {

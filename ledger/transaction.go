@@ -18,13 +18,13 @@ type Transaction struct {
 func (t *Transaction) GetTransactionsByReference(reference string) *[]ledger.Transaction {
 	url, _ := url.Parse("/v3/ledger/transaction/reference/" + reference)
 
-	var txs []ledger.Transaction
 	res, err := sender.SendGet(url.String(), nil)
 	if err != nil {
 		fmt.Println(err.Error())
 		return nil
 	}
 
+	var txs []ledger.Transaction
 	err = json.Unmarshal([]byte(res), &txs)
 	if err != nil {
 		fmt.Println(err.Error())

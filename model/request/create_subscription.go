@@ -10,7 +10,7 @@ type SubscriptionAttrAccountBalanceLimit struct {
 }
 
 type SubscriptionAttrOffchainWithdrawal struct {
-	Currency string
+	Currency string `json:"currency"`
 }
 
 type SubscriptionAttrTxHistoryReport struct {
@@ -27,6 +27,6 @@ type SubscriptionAttrCompleteBlockchainTx struct {
 }
 
 type CreateSubscription struct {
-	Type common.SubscriptionType
-	attr interface{}
+	Type common.SubscriptionType `json:"type"`
+	Attr interface{}             `json:"attr"`
 }

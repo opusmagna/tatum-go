@@ -14,29 +14,29 @@ type Info struct {
 	 * @type {string}
 	 * @memberof LtcInfo
 	 */
-	chain string
+	Chain string
 	/**
 	 * Last block.
 	 * @type {number}
 	 * @memberof LtcInfo
 	 */
-	blocks uint32
+	Blocks uint64
 	/**
 	 * Last headers.
 	 * @type {number}
 	 * @memberof LtcInfo
 	 */
-	headers uint32
+	Headers uint64
 	/**
 	 * Hash of the last block.
 	 * @type {string}
 	 * @memberof LtcInfo
 	 */
-	bestblockhash string
+	Bestblockhash string
 	/**
 	 * Difficulty of the PoW algorithm.
 	 * @type {number}
 	 * @memberof LtcInfo
 	 */
-	difficulty decimal.Decimal
+	Difficulty decimal.Decimal
 }

@@ -42,7 +42,7 @@ type Tx struct {
 	 * @type {number}
 	 * @memberof LtcTx
 	 */
-	Height uint32
+	Height uint64
 	/**
 	 * Hash of the block this transaction belongs to.
 	 * @type {string}

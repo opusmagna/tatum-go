@@ -1,5 +1,7 @@
 package common
 
+import "github.com/shopspring/decimal"
+
 type Balance struct {
-	Balance uint64
+	Balance decimal.Decimal
 }

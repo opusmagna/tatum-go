@@ -3,6 +3,7 @@ package blockchain
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/go-playground/validator"
 	"github.com/tatumio/tatum-go/model/request"
 	"github.com/tatumio/tatum-go/model/response/common"
 	"github.com/tatumio/tatum-go/model/response/vet"
@@ -11,6 +12,8 @@ import (
 
 type Vet struct {
 }
+
+var validate *validator.Validate
 
 /**
  * For more details, see <a href="https://tatum.io/apidoc#operation/VetBroadcast" target="_blank">Tatum API documentation</a>
@@ -46,8 +49,10 @@ func (v *Vet) VetBroadcast(txData string, signatureId string) *common.Transactio
  * For more details, see <a href="https://tatum.io/apidoc#operation/VetEstimateGas" target="_blank">Tatum API documentation</a>
  */
 func (v *Vet) VetEstimateGas(body request.EstimateGasVet) *vet.VetEstimateGas {
-	// TO-DO validateOrReject(body);
-	url := "/v3/vet/broadcast/transaction/gas"
+	validate = validator.New()
+	err := validate.Struct(body)
+
+	url := "/v3/vet/transaction/gas"
 	requestJSON, err := json.Marshal(body)
 	if err != nil {
 		fmt.Println(err.Error())
@@ -117,41 +122,43 @@ func (v *Vet) VetGetBlock(hash string) *vet.VetBlock {
 /**
  * For more details, see <a href="https://tatum.io/apidoc#operation/VetGetBalance" target="_blank">Tatum API documentation</a>
  */
-func (v *Vet) VetGetAccountBalance(address string) uint64 {
+func (v *Vet) VetGetAccountBalance(address string) *common.Balance {
 	url := "/v3/vet/account/balance/" + address
 
+	var balance common.Balance
 	res, err := sender.SendGet(url, nil)
 	if err != nil {
 		fmt.Println(err.Error())
-		return 0
+		return &balance
 	}
 
-	balance, err := strconv.ParseUint(res, 10, 64)
+	err = json.Unmarshal([]byte(res), &balance)
 	if err != nil {
 		fmt.Println(err.Error())
-		return 0
+		return &balance
 	}
-	return balance
+	return &balance
 }
 
 /**
  * For more details, see <a href="https://tatum.io/apidoc#operation/VetGetEnergy" target="_blank">Tatum API documentation</a>
  */
-func (v *Vet) VetGetAccountEnergy(address string) uint64 {
+func (v *Vet) VetGetAccountEnergy(address string) *vet.Energy {
 	url := "/v3/vet/account/energy/" + address
 
+	var energy vet.Energy
 	res, err := sender.SendGet(url, nil)
 	if err != nil {
 		fmt.Println(err.Error())
-		return 0
+		return &energy
 	}
 
-	energy, err := strconv.ParseUint(res, 10, 64)
+	err = json.Unmarshal([]byte(res), &energy)
 	if err != nil {
 		fmt.Println(err.Error())
-		return 0
+		return &energy
 	}
-	return energy
+	return &energy
 }
 
 /**

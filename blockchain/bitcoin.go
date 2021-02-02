@@ -116,7 +116,7 @@ func (b *Bitcoin) BtcGetUTXO(hash string, i uint64) *btc.UTXO {
 /**
  * For more details, see <a href="https://tatum.io/apidoc#operation/BtcGetTxByAddress" target="_blank">Tatum API documentation</a>
  */
-func (b *Bitcoin) BtcGetTxForAccount(address string, pageSize uint16, offset uint16) *[]btc.Tx {
+func (b *Bitcoin) BtcGetTxForAccount(address string, pageSize uint16, offset uint16) []btc.Tx {
 	url, _ := url.Parse("/v3/bitcoin/transaction/address/" + address)
 	q := url.Query()
 	q.Add("offset", strconv.FormatUint(uint64(offset), 10))
@@ -131,7 +131,7 @@ func (b *Bitcoin) BtcGetTxForAccount(address string, pageSize uint16, offset uin
 		return nil
 	}
 	json.Unmarshal([]byte(res), &txs)
-	return &txs
+	return txs
 }
 
 /**

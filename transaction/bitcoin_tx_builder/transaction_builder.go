@@ -1,4 +1,4 @@
-package bitcoin
+package bitcoin_tx_builder
 
 import (
 	"bytes"
@@ -37,17 +37,19 @@ func (tb *transactionBuilder) Init(net *chaincfg.Params) TransactionBuilder {
 }
 
 func (tb *transactionBuilder) AddOutput(address string, amount int64) TransactionBuilder {
-
+	fmt.Println(amount)
 	var (
 		toAddress, err = btcutil.DecodeAddress(address, tb.net)
 	)
 	if err != nil {
-		return New()
+		fmt.Println(err.Error())
+		return tb
 	}
 
 	pkScript, err := txscript.PayToAddrScript(toAddress)
 	if err != nil {
-		return New()
+		fmt.Println(err.Error())
+		return tb
 	}
 
 	// Add an output paying to the address.
@@ -63,7 +65,8 @@ func (tb *transactionBuilder) AddInput(txHash string, index uint32, key string) 
 
 	utxoHash, err := chainhash.NewHashFromStr(txHash)
 	if err != nil {
-		return New()
+		fmt.Println(err.Error())
+		return tb
 	}
 
 	// Add the input(s) the redeeming transaction will spend.
@@ -85,12 +88,15 @@ func (tb *transactionBuilder) Sign() Transaction {
 		key := tb.privateKeysToSign[i]
 		pkScript, wif, err := createPkScript(key, tb.net)
 		if err != nil {
-			return nil
+			return &transaction{}
 		}
+
+		disasm, _ := txscript.DisasmString(pkScript)
+		fmt.Println("Script Disassembly:", disasm)
 
 		sigScript, err := txscript.SignatureScript(tb.tx, i, pkScript, txscript.SigHashAll, wif.PrivKey, false)
 		if err != nil {
-			return nil
+			return &transaction{}
 		}
 		tb.tx.TxIn[i].SignatureScript = sigScript
 
@@ -99,10 +105,10 @@ func (tb *transactionBuilder) Sign() Transaction {
 		flags := txscript.StandardVerifyFlags
 		vm, err := txscript.NewEngine(pkScript, tb.tx, i, flags, nil, nil, tb.tx.TxOut[i].Value)
 		if err != nil {
-			return nil
+			return &transaction{}
 		}
 		if err := vm.Execute(); err != nil {
-			return nil
+			return &transaction{}
 		}
 	}
 
@@ -110,11 +116,8 @@ func (tb *transactionBuilder) Sign() Transaction {
 
 	err := tb.tx.Serialize(&signedTx)
 	if err != nil {
-		return nil
+		return &transaction{}
 	}
-
-	disasm, _ := txscript.DisasmString(signedTx.Bytes())
-	fmt.Println("Script Disassembly:", disasm)
 
 	return &transaction{signedTx}
 }

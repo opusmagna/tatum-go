@@ -19,8 +19,6 @@ type AccountLedger struct {
 var sender = &utils.Async{}
 var validate *validator.Validate
 
-var validate *validator.Validate
-
 /**
  * For more details, see <a href="https://tatum.io/apidoc#operation/getAccountByAccountId" target="_blank">Tatum API documentation</a>
  */

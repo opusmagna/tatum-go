@@ -142,7 +142,7 @@ type BchTxVout struct {
 	 * @type {string}
 	 * @memberof BchTxVout
 	 */
-	Value string
+	Value float64
 	/**
 	 *
 	 * @type {number}

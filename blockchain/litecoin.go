@@ -112,7 +112,7 @@ func (b *Litecoin) LtcGetUTXO(hash string, i uint64) *ltc.LtcUTXO {
 /**
  * For more details, see <a href="https://tatum.io/apidoc#operation/LtcGetTxByAddress" target="_blank">Tatum API documentation</a>
  */
-func (b *Litecoin) LtcGetTxForAccount(address string, pageSize uint16, offset uint16) *[]ltc.Tx {
+func (b *Litecoin) LtcGetTxForAccount(address string, pageSize uint16, offset uint16) []ltc.Tx {
 	url, _ := url.Parse("/v3/litecoin/transaction/address/" + address)
 	q := url.Query()
 	q.Add("offset", strconv.FormatUint(uint64(offset), 10))
@@ -127,7 +127,7 @@ func (b *Litecoin) LtcGetTxForAccount(address string, pageSize uint16, offset ui
 		return nil
 	}
 	json.Unmarshal([]byte(res), &txs)
-	return &txs
+	return txs
 }
 
 /**

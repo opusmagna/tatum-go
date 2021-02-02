@@ -52,3 +52,25 @@ func TestBitcoinTx_PrepareBitcoinSignedTransaction(t *testing.T) {
 		"00000000", txData, "they should be equal")
 
 }
+
+func TestBitcoinTx_PrepareBitcoinSignedTransaction_2(t *testing.T) {
+
+	body := request.TransferBtcBasedBlockchain{}
+	var utxo = request.FromUTXO{TxHash: "53faa103e8217e1520f5149a4e8c84aeb58e55bdab11164a95e69a8ca50f8fcc",
+		Index: 0, PrivateKey: "cVX7YtgL5muLTPncHFhP95oitV1mqUUA5VeSn8HeCRJbPqipzobf"}
+
+	body.FromUTXO = make([]request.FromUTXO, 0)
+	body.FromUTXO = append(body.FromUTXO, utxo)
+	var to = request.To{Address: "2MzNGwuKvMEvKMQogtgzSqJcH2UW3Tc5oc7", Value: 0.02969944}
+
+	body.To = make([]request.To, 0)
+	body.To = append(body.To, to)
+
+	btc := BitcoinTx{}
+
+	txData, _ := btc.PrepareBitcoinSignedTransaction(true, body)
+	fmt.Println(txData)
+
+	//assert.Equal(t, "0100000001cc8f0fa58c9ae6954a1611abbd558eb5ae848c4e9a14f520157e21e803a1fa53000000006a47304402205e49848369acc41719b669dcc9ba486c570f1ca4974f61a4321329fe35e3ff36022007485588ede47e17db992ba41aef35c72cb292f9889d471f2c592fb7f252672e012103b17a162956975765aa6951f6349f9ab5bf510584c5df9f6065924bfd94a08513ffffffff0158512d000000000017a9144e1e4321307c88ecd4ddd6aeec040c6f01e53c998700000000", txData, "they should be equal")
+
+}

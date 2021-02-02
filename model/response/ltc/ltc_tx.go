@@ -84,7 +84,7 @@ type Tx struct {
 	 * @type {Array<LtcTxOutputs>}
 	 * @memberof LtcTx
 	 */
-	Outputs TxOutputs
+	Outputs []TxOutputs
 	/**
 	 * Block this transaction was included in.
 	 * @type {number}
@@ -189,7 +189,7 @@ type TxOutputs struct {
 	 * @type {string}
 	 * @memberof LtcTxOutputs
 	 */
-	Value string
+	Value uint64
 	/**
 	 * Transaction script.
 	 * @type {string}

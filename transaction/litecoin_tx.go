@@ -11,18 +11,10 @@ import (
 	"github.com/tatumio/tatum-go/transaction/bitcoin_tx_builder"
 )
 
-type BitcoinTx struct {
+type LitecoinTx struct {
 }
 
-var validate *validator.Validate
-
-/**
- * Sign Bitcoin Cash transaction with private keys locally. Nothing is broadcast to the blockchain.
- * @param testnet mainnet or testnet version
- * @param body content of the transaction to broadcast
- * @returns transaction data to be broadcast to blockchain.
- */
-func (b *BitcoinTx) prepareSignedTransaction(network *chaincfg.Params, body request.TransferBtcBasedBlockchain) (string, error) {
+func (b *LitecoinTx) prepareSignedTransaction(network *chaincfg.Params, body request.TransferBtcBasedBlockchain) (string, error) {
 	validate = validator.New()
 	err := validate.Struct(body)
 	if err != nil {
@@ -45,7 +37,7 @@ func (b *BitcoinTx) prepareSignedTransaction(network *chaincfg.Params, body requ
 	to := body.To
 	fromAddress := body.FromAddress
 
-	var bitcoin = blockchain.Bitcoin{}
+	var litecoin = blockchain.Litecoin{}
 	var (
 		transactionBuilder = bitcoin_tx_builder.New().Init(network)
 	)
@@ -60,12 +52,12 @@ func (b *BitcoinTx) prepareSignedTransaction(network *chaincfg.Params, body requ
 
 	if len(fromAddress) > 0 {
 		for i := range fromAddress {
-			txs := bitcoin.BtcGetTxForAccount(fromAddress[i].Address, 50, 0)
+			txs := litecoin.LtcGetTxForAccount(fromAddress[i].Address, 50, 0)
 			for j := range txs {
 				outputs := txs[j].Outputs
 				for k := range outputs {
 					if outputs[k].Address == fromAddress[i].Address {
-						utxo := bitcoin.BtcGetUTXO(txs[j].Hash, outputs[k].Value)
+						utxo := litecoin.LtcGetUTXO(txs[j].Hash, outputs[k].Value)
 						fmt.Println(utxo)
 						transactionBuilder.AddInput(txs[j].Hash, uint32(k), fromAddress[i].PrivateKey)
 					}
@@ -82,12 +74,12 @@ func (b *BitcoinTx) prepareSignedTransaction(network *chaincfg.Params, body requ
 }
 
 /**
- * Sign Bitcoin transaction with private keys locally. Nothing is broadcast to the blockchain.
+ * Sign Litcoin transaction with private keys locally. Nothing is broadcast to the blockchain.
  * @param testnet mainnet or testnet version
  * @param body content of the transaction to broadcast
  * @returns transaction data to be broadcast to blockchain.
  */
-func (b *BitcoinTx) PrepareBitcoinSignedTransaction(testnet bool, body request.TransferBtcBasedBlockchain) (string, error) {
+func (b *LitecoinTx) PrepareLitecoinSignedTransaction(testnet bool, body request.TransferBtcBasedBlockchain) (string, error) {
 	var network *chaincfg.Params
 	if testnet {
 		network = &chaincfg.TestNet3Params
@@ -98,15 +90,15 @@ func (b *BitcoinTx) PrepareBitcoinSignedTransaction(testnet bool, body request.T
 }
 
 /**
- * Send Bitcoin transaction to the blockchain. This method broadcasts signed transaction to the blockchain.
+ * Send Litecoin transaction to the blockchain. This method broadcasts signed transaction to the blockchain.
  * This operation is irreversible.
  * @param testnet mainnet or testnet version
  * @param body content of the transaction to broadcast
  * @returns transaction id of the transaction in the blockchain
  */
-func (b *BitcoinTx) SendBitcoinTransaction(testnet bool, body request.TransferBtcBasedBlockchain) *common.TransactionHash {
+func (b *LitecoinTx) SendLitecoinTransaction(testnet bool, body request.TransferBtcBasedBlockchain) *common.TransactionHash {
 	bitcoin := &blockchain.Bitcoin{}
-	txData, err := b.PrepareBitcoinSignedTransaction(testnet, body)
+	txData, err := b.PrepareLitecoinSignedTransaction(testnet, body)
 	if err != nil {
 		fmt.Println(err.Error())
 		return nil

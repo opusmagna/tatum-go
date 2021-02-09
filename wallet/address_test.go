@@ -38,10 +38,10 @@ func TestGenerateAddressFromXPub_BCH(t *testing.T) {
 
 func TestGeneratePrivateKeyFromMnemonic_BTC(t *testing.T) {
 	mnemonic := "quantum tobacco key they maid mean crime youth chief jungle mind design broken tilt bus shoulder leaf good forward erupt split divert bread kitten"
-	privKey := GeneratePrivateKeyFromMnemonic(request.BTC, true, mnemonic, 1)
-	assert.Equal(t, "cQ1YZMep3CiAnMTA9y62ha6BjGaaTFsTvtDuGmucGvpAVmS89khV", privKey, "they should be equal")
+	//privKey := GeneratePrivateKeyFromMnemonic(request.BTC, true, mnemonic, 1)
+	//assert.Equal(t, "cQ1YZMep3CiAnMTA9y62ha6BjGaaTFsTvtDuGmucGvpAVmS89khV", privKey, "they should be equal")
 
-	privKey = GeneratePrivateKeyFromMnemonic(request.BTC, false, mnemonic, 1)
+	privKey := GeneratePrivateKeyFromMnemonic(request.BTC, false, mnemonic, 1)
 	assert.Equal(t, "KwrYonf8pFfyQR87NTn124Ep9zoJsZMBCoVUi7mjMc1eTHDyLyBN", privKey, "they should be equal")
 }
 

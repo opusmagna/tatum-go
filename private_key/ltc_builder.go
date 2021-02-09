@@ -2,9 +2,9 @@ package private_key
 
 import (
 	"fmt"
-	"github.com/ltcsuite/ltcd/chaincfg"
-	"github.com/ltcsuite/ltcutil"
-	"github.com/ltcsuite/ltcutil/hdkeychain"
+	"github.com/nvxtien/ltcutil"
+	"github.com/nvxtien/ltcutil/hdkeychain"
+	ltctatum "github.com/tatumio/ltcd/chaincfg"
 	"github.com/tatumio/tatum-go/utils"
 	"regexp"
 	"strconv"
@@ -12,15 +12,16 @@ import (
 )
 
 type LtcPrivateKey interface {
-	Network(net *chaincfg.Params) LtcPrivateKey
+	Network(net *ltctatum.Params) LtcPrivateKey
 	FromSeed(mnemonic string) LtcPrivateKey
 	DerivePath(path string) LtcPrivateKey
 	Derive(i uint32) LtcPrivateKey
 	ToWIF() string
+	Xpub() string
 }
 
 type ltcPrivateKey struct {
-	net  *chaincfg.Params
+	net  *ltctatum.Params
 	seed []byte
 	key  *hdkeychain.ExtendedKey
 }
@@ -29,7 +30,7 @@ func NewLtcPrivateKey() LtcPrivateKey {
 	return &ltcPrivateKey{}
 }
 
-func (p *ltcPrivateKey) Network(net *chaincfg.Params) LtcPrivateKey {
+func (p *ltcPrivateKey) Network(net *ltctatum.Params) LtcPrivateKey {
 	p.net = net
 	return p
 }
@@ -78,6 +79,8 @@ func (p *ltcPrivateKey) DerivePath(path string) LtcPrivateKey {
 			fmt.Println(err)
 			return &ltcPrivateKey{}
 		}
+		pubKey, _ := p.key.Neuter()
+		fmt.Println(pubKey.String())
 	}
 	return p
 }
@@ -106,4 +109,14 @@ func (p *ltcPrivateKey) ToWIF() string {
 	}
 
 	return wif.String()
+}
+
+func (p *ltcPrivateKey) Xpub() string {
+	pubKey, err := p.key.Neuter()
+	if err != nil {
+		fmt.Println(err)
+		return utils.EmptySpace
+	}
+
+	return pubKey.String()
 }

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/btcsuite/btcd/chaincfg"
 	"github.com/btcsuite/btcutil"
-	"github.com/btcsuite/btcutil/hdkeychain"
+	btc "github.com/btcsuite/btcutil/hdkeychain"
 	"github.com/tatumio/tatum-go/utils"
 	"regexp"
 	"strconv"
@@ -17,12 +17,13 @@ type BtcPrivateKey interface {
 	DerivePath(path string) BtcPrivateKey
 	Derive(i uint32) BtcPrivateKey
 	ToWIF() string
+	Xpub() string
 }
 
 type btcPrivateKey struct {
 	net  *chaincfg.Params
 	seed []byte
-	key  *hdkeychain.ExtendedKey
+	key  *btc.ExtendedKey
 }
 
 func NewBtcPrivateKey() BtcPrivateKey {
@@ -43,7 +44,7 @@ func (p *btcPrivateKey) FromSeed(mnemonic string) BtcPrivateKey {
 
 func (p *btcPrivateKey) DerivePath(path string) BtcPrivateKey {
 	var err error
-	p.key, err = hdkeychain.NewMaster(p.seed, p.net)
+	p.key, err = btc.NewMaster(p.seed, p.net)
 	if err != nil {
 		fmt.Println(err)
 		return &btcPrivateKey{}
@@ -69,7 +70,7 @@ func (p *btcPrivateKey) DerivePath(path string) BtcPrivateKey {
 
 		var r uint32
 		if isHard {
-			r = hdkeychain.HardenedKeyStart + uint32(nodeNumber)
+			r = btc.HardenedKeyStart + uint32(nodeNumber)
 		} else {
 			r = uint32(nodeNumber)
 		}
@@ -78,6 +79,9 @@ func (p *btcPrivateKey) DerivePath(path string) BtcPrivateKey {
 			fmt.Println(err)
 			return &btcPrivateKey{}
 		}
+
+		pubKey, _ := p.key.Neuter()
+		fmt.Println(pubKey.String())
 	}
 	return p
 }
@@ -106,4 +110,14 @@ func (p *btcPrivateKey) ToWIF() string {
 	}
 
 	return wif.String()
+}
+
+func (p *btcPrivateKey) Xpub() string {
+	pubKey, err := p.key.Neuter()
+	if err != nil {
+		fmt.Println(err)
+		return utils.EmptySpace
+	}
+
+	return pubKey.String()
 }

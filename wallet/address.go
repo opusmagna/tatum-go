@@ -7,9 +7,9 @@ import (
 	"github.com/btcsuite/btcutil/hdkeychain"
 	bch "github.com/gcash/bchd/chaincfg"
 	bchkeychain "github.com/gcash/bchutil/hdkeychain"
-	ltc "github.com/ltcsuite/ltcd/chaincfg"
-	"github.com/ltcsuite/ltcutil"
-	ltckeychain "github.com/ltcsuite/ltcutil/hdkeychain"
+	"github.com/nvxtien/ltcutil"
+	ltckeychain "github.com/nvxtien/ltcutil/hdkeychain"
+	ltc "github.com/tatumio/ltcd/chaincfg"
 	"github.com/tatumio/tatum-go/model/request"
 	"github.com/tatumio/tatum-go/private_key"
 	"github.com/tatumio/tatum-go/utils"
@@ -75,7 +75,7 @@ func generateBtcAddress(testnet bool, xpub string, i uint32) string {
 func generateLtcAddress(testnet bool, xpub string, i uint32) string {
 	var network *ltc.Params
 	if testnet {
-		network = &ltc.TestNet4Params
+		network = &ltc.TestNet3Params
 	} else {
 		network = &ltc.MainNetParams
 	}
@@ -85,12 +85,17 @@ func generateLtcAddress(testnet bool, xpub string, i uint32) string {
 		fmt.Println(err)
 		return utils.EmptySpace
 	}
+	_pubKey, err := key.Neuter()
+	fmt.Println(_pubKey.String())
 
 	key, err = key.Child(i)
 	if err != nil {
 		fmt.Println(err)
 		return utils.EmptySpace
 	}
+
+	_pubKey, err = key.Neuter()
+	fmt.Println(_pubKey.String())
 
 	pubKey, err := key.ECPubKey()
 	if err != nil {
@@ -185,7 +190,7 @@ func generateLtcPrivateKey(testnet bool, mnemonic string, i uint32) string {
 	var network *ltc.Params
 	var path string
 	if testnet {
-		network = &ltc.TestNet4Params
+		network = &ltc.TestNet3Params
 		path = utils.TestnetDerivationPath
 	} else {
 		network = &ltc.MainNetParams

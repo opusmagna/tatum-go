@@ -17,6 +17,7 @@ type BchPrivateKey interface {
 	DerivePath(path string) BchPrivateKey
 	Derive(i uint32) BchPrivateKey
 	ToWIF() string
+	Xpub() string
 }
 
 type bchPrivateKey struct {
@@ -106,4 +107,14 @@ func (p *bchPrivateKey) ToWIF() string {
 	}
 
 	return wif.String()
+}
+
+func (p *bchPrivateKey) Xpub() string {
+	pubKey, err := p.key.Neuter()
+	if err != nil {
+		fmt.Println(err)
+		return utils.EmptySpace
+	}
+
+	return pubKey.String()
 }

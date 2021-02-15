@@ -4,6 +4,7 @@ import (
 	"github.com/btcsuite/btcd/chaincfg"
 	bch "github.com/gcash/bchd/chaincfg"
 	"github.com/tatumio/tatum-go/model/request"
+	networkcfg "github.com/tatumio/tatum-go/network"
 	"github.com/tatumio/tatum-go/private_key"
 	"github.com/tatumio/tatum-go/utils"
 )
@@ -68,12 +69,14 @@ func generateBtcWallet(testnet bool, mnemonic string) *Wallet {
  */
 func generateLtcWallet(testnet bool, mnemonic string) *Wallet {
 	var network *chaincfg.Params
-	var path string
+	var (
+		path string
+	)
 	if testnet {
-		network = &chaincfg.TestNet3Params
+		network = &networkcfg.LtcTestNet4Params
 		path = utils.TestnetDerivationPath
 	} else {
-		network = &chaincfg.MainNetParams
+		network = &networkcfg.LtcMainNetParams
 		path = utils.LtcDerivationPath
 	}
 

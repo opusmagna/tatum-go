@@ -25,9 +25,9 @@ func TestGenerateWallet_LTC(t *testing.T) {
 	assert.Equal(t, "ttub4giastL5S3AicjXRBEJt7uq22b611rJvVfTgJSRfYeyZkwXwKnZcctK3tEjMpqrgiNSnYAzkKPJDxGoKNWQzkzTJxSryHbaYxsYW9Vr6AYQ", testnet.Xpub, "they should be equal")
 	assert.Equal(t, mnemonic, testnet.Mnemonic, "they should be equal")
 
-	//mainnet := GenerateWallet(request.LTC, false, mnemonic)
-	//assert.Equal(t, "Ltub2aXe9g8RPgAcY6jb6FftNJfQXHMV6UNBeZwrWH1K3vjpua9u8uj95xkZyCC4utdEbfYeh9TwxcUiFy2mGzBCJVBwW3ezHmLX2fHxv7HUt8J", mainnet.Xpub, "they should be equal")
-	//assert.Equal(t, mnemonic, mainnet.Mnemonic, "they should be equal")
+	mainnet := GenerateWallet(request.LTC, false, mnemonic)
+	assert.Equal(t, "Ltub2aXe9g8RPgAcY6jb6FftNJfQXHMV6UNBeZwrWH1K3vjpua9u8uj95xkZyCC4utdEbfYeh9TwxcUiFy2mGzBCJVBwW3ezHmLX2fHxv7HUt8J", mainnet.Xpub, "they should be equal")
+	assert.Equal(t, mnemonic, mainnet.Mnemonic, "they should be equal")
 }
 
 func TestGenerateWallet_BCH(t *testing.T) {

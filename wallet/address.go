@@ -7,10 +7,8 @@ import (
 	"github.com/btcsuite/btcutil/hdkeychain"
 	bch "github.com/gcash/bchd/chaincfg"
 	bchkeychain "github.com/gcash/bchutil/hdkeychain"
-	"github.com/nvxtien/ltcutil"
-	ltckeychain "github.com/nvxtien/ltcutil/hdkeychain"
-	ltc "github.com/tatumio/ltcd/chaincfg"
 	"github.com/tatumio/tatum-go/model/request"
+	networkcfg "github.com/tatumio/tatum-go/network"
 	"github.com/tatumio/tatum-go/private_key"
 	"github.com/tatumio/tatum-go/utils"
 )
@@ -33,32 +31,7 @@ func generateBtcAddress(testnet bool, xpub string, i uint32) string {
 	} else {
 		network = &chaincfg.MainNetParams
 	}
-
-	key, err := hdkeychain.NewKeyFromString(xpub)
-	if err != nil {
-		fmt.Println(err)
-		return utils.WhiteSpace
-	}
-
-	key, err = key.Derive(i)
-	if err != nil {
-		fmt.Println(err)
-		return utils.EmptySpace
-	}
-
-	pubKey, err := key.ECPubKey()
-	if err != nil {
-		fmt.Println(err)
-		return utils.EmptySpace
-	}
-
-	addr, err := btcutil.NewAddressPubKey(pubKey.SerializeCompressed(), network)
-	if err != nil {
-		fmt.Println(err)
-		return utils.EmptySpace
-	}
-
-	return addr.EncodeAddress()
+	return generateAddress(network, xpub, i)
 }
 
 /**
@@ -73,43 +46,13 @@ func generateBtcAddress(testnet bool, xpub string, i uint32) string {
  * @returns blockchain address
  */
 func generateLtcAddress(testnet bool, xpub string, i uint32) string {
-	var network *ltc.Params
+	var network *chaincfg.Params
 	if testnet {
-		network = &ltc.TestNet3Params
+		network = &networkcfg.LtcTestNet4Params
 	} else {
-		network = &ltc.MainNetParams
+		network = &networkcfg.LtcMainNetParams
 	}
-
-	key, err := ltckeychain.NewKeyFromString(xpub)
-	if err != nil {
-		fmt.Println(err)
-		return utils.EmptySpace
-	}
-	_pubKey, err := key.Neuter()
-	fmt.Println(_pubKey.String())
-
-	key, err = key.Child(i)
-	if err != nil {
-		fmt.Println(err)
-		return utils.EmptySpace
-	}
-
-	_pubKey, err = key.Neuter()
-	fmt.Println(_pubKey.String())
-
-	pubKey, err := key.ECPubKey()
-	if err != nil {
-		fmt.Println(err)
-		return utils.EmptySpace
-	}
-
-	addr, err := ltcutil.NewAddressPubKey(pubKey.SerializeCompressed(), network)
-	if err != nil {
-		fmt.Println(err)
-		return utils.EmptySpace
-	}
-
-	return addr.EncodeAddress()
+	return generateAddress(network, xpub, i)
 }
 
 /**
@@ -152,6 +95,34 @@ func generateBchAddress(testnet bool, xpub string, i uint32) string {
 	return network.CashAddressPrefix + ":" + addressPubKeyHash.EncodeAddress()
 }
 
+func generateAddress(network *chaincfg.Params, xpub string, i uint32) string {
+	key, err := hdkeychain.NewKeyFromString(xpub)
+	if err != nil {
+		fmt.Println(err)
+		return utils.WhiteSpace
+	}
+
+	key, err = key.Derive(i)
+	if err != nil {
+		fmt.Println(err)
+		return utils.EmptySpace
+	}
+
+	pubKey, err := key.ECPubKey()
+	if err != nil {
+		fmt.Println(err)
+		return utils.EmptySpace
+	}
+
+	addr, err := btcutil.NewAddressPubKey(pubKey.SerializeCompressed(), network)
+	if err != nil {
+		fmt.Println(err)
+		return utils.EmptySpace
+	}
+
+	return addr.EncodeAddress()
+}
+
 /**
  * Generate Bitcoin private key from mnemonic seed
  * @param testnet testnet or mainnet version of address
@@ -187,17 +158,17 @@ func generateBtcPrivateKey(testnet bool, mnemonic string, i uint32) string {
  * @returns blockchain private key to the address
  */
 func generateLtcPrivateKey(testnet bool, mnemonic string, i uint32) string {
-	var network *ltc.Params
+	var network *chaincfg.Params
 	var path string
 	if testnet {
-		network = &ltc.TestNet3Params
+		network = &networkcfg.LtcTestNet4Params
 		path = utils.TestnetDerivationPath
 	} else {
-		network = &ltc.MainNetParams
+		network = &networkcfg.LtcMainNetParams
 		path = utils.LtcDerivationPath
 	}
 
-	builder := private_key.NewLtcPrivateKey().
+	builder := private_key.NewBtcPrivateKey().
 		Network(network).
 		FromSeed(mnemonic).
 		DerivePath(path).

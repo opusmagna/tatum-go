@@ -14,6 +14,7 @@ import (
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
 	"github.com/ethereum/go-ethereum/params"
+	"github.com/ethereum/go-ethereum/rlp"
 	"github.com/go-playground/validator"
 	"github.com/tatumio/tatum-go/blockchain"
 	"github.com/tatumio/tatum-go/contracts/erc20"
@@ -21,10 +22,13 @@ import (
 	response "github.com/tatumio/tatum-go/model/response/common"
 	"github.com/tatumio/tatum-go/utils"
 	"golang.org/x/crypto/sha3"
+	"io/ioutil"
 	"log"
 	"math/big"
+	"net/http"
 	"os"
 	"strconv"
+	"strings"
 )
 
 type EthTx struct {
@@ -34,25 +38,26 @@ type EthTx struct {
  * Estimate Gas price for the transaction.
  * @param client
  */
-func ethGetGasPriceInGWei() int64 {
-
+func ethGetGasPriceInWei() *big.Int {
 	var result map[string]interface{}
-	res, err := sender.SendGet("https://ethgasstation.info/json/ethgasAPI.json", nil)
+	res, err := http.Get("https://ethgasstation.info/json/ethgasAPI.json")
 	if err != nil {
-		return 0
+		return nil
 	}
 
-	err = json.Unmarshal([]byte(res), &result)
+	bytes, _ := ioutil.ReadAll(res.Body)
+	fmt.Println(string(bytes))
+	err = json.Unmarshal(bytes, &result)
 	if err != nil {
-		return 0
+		return nil
 	}
 
 	data, err := strconv.Atoi(fmt.Sprint(result["fast"]))
 	if err != nil {
-		return 0
+		return nil
 	}
-
-	return int64(data)
+	inGWei := new(big.Int).Div(big.NewInt(int64(data)), big.NewInt(10))
+	return new(big.Int).Mul(inGWei, big.NewInt(params.GWei)) // GWei to Wei
 }
 
 /**
@@ -86,7 +91,7 @@ func (b *EthTx) PrepareStoreDataTransaction(testnet bool, body request.CreateRec
 		return "", err
 	}
 
-	privateKey, err := crypto.HexToECDSA(body.FromPrivateKey)
+	privateKey, err := crypto.HexToECDSA(strings.Replace(body.FromPrivateKey, "0x", "", -1))
 	if err != nil {
 		log.Fatal(err)
 		return "", err
@@ -112,7 +117,7 @@ func (b *EthTx) PrepareStoreDataTransaction(testnet bool, body request.CreateRec
 	}
 
 	gasLimit := uint64(len(body.Data)*68 + 21000)
-	gasPrice := big.NewInt(ethGetGasPriceInGWei())
+	gasPrice := ethGetGasPriceInWei()
 
 	return createRawTransaction(client, body.FromPrivateKey, body.Nonce, address, big.NewInt(0), gasLimit, gasPrice, []byte(body.Data))
 }
@@ -152,17 +157,13 @@ func (b *EthTx) PrepareEthOrErc20SignedTransaction(testnet bool, body request.Tr
 	var value *big.Int
 	var data []byte
 
-	var ok bool
-	if body.Currency.String() == request.ETH {
+	if body.Currency == request.ETH {
 		to = common.HexToAddress(body.To)
-		value, ok = new(big.Int).SetString(body.Amount, 10)
-		value = new(big.Int).Mul(value, big.NewInt(params.GWei)) // Ether to GWei
-		if !ok {
-			return "", err
-		}
-		data = []byte(body.Data)
+		value = utils.Ether2Wei(body.Amount)
+		data = []byte(hex.EncodeToString([]byte(body.Data)))
+
 	} else {
-		to = common.HexToAddress(utils.ContractAddresses()(body.Currency.String()))
+		to = common.HexToAddress(utils.ContractAddresses()(body.Currency))
 		receiver := common.HexToAddress(body.To)
 		// Token transfers don't require ETH to be transferred so set the value to 0
 		value = big.NewInt(0)
@@ -174,7 +175,7 @@ func (b *EthTx) PrepareEthOrErc20SignedTransaction(testnet bool, body request.Tr
 
 		paddedAddress := common.LeftPadBytes(receiver.Bytes(), 32)
 
-		digits := math.BigPow(10, int64(utils.ContractDecimals()(body.Currency.String())))
+		digits := math.BigPow(10, int64(utils.ContractDecimals()(body.Currency)))
 		amount := new(big.Int)
 		amount.SetString(body.Amount, 10)
 		amount = new(big.Int).Mul(amount, digits)
@@ -321,7 +322,7 @@ func (b *EthTx) PrepareDeployErc20SignedTransaction(testnet bool, body request.D
 func createRawTransaction(client *ethclient.Client, prv string,
 	nonce uint64, to common.Address, amount *big.Int, gasLimit uint64, gasPrice *big.Int, data []byte) (string, error) {
 
-	privateKey, err := crypto.HexToECDSA(prv)
+	privateKey, err := crypto.HexToECDSA(strings.Replace(prv, "0x", "", 1))
 	if err != nil {
 		log.Fatal(err)
 		return "", err
@@ -329,19 +330,20 @@ func createRawTransaction(client *ethclient.Client, prv string,
 
 	tx := types.NewTransaction(nonce, to, amount, gasLimit, gasPrice, data)
 
-	chainID, err := client.NetworkID(context.Background())
+	//chainID, err := client.NetworkID(context.Background())
+	//	log.Fatal(err)
+	//if err != nil {
+	//return "", err
+	//}
+
+	//signedTx, err := types.SignTx(tx, types.NewEIP155Signer(big.NewInt(1)), privateKey)
+	signedTx, err := types.SignTx(tx, types.HomesteadSigner{}, privateKey)
 	if err != nil {
 		log.Fatal(err)
 		return "", err
 	}
 
-	signedTx, err := types.SignTx(tx, types.NewEIP155Signer(chainID), privateKey)
-	if err != nil {
-		log.Fatal(err)
-		return "", err
-	}
-
-	rawTxBytes, err := signedTx.MarshalBinary()
+	rawTxBytes, err := rlp.EncodeToBytes(signedTx)
 	if err != nil {
 		log.Fatal(err)
 		return "", err
@@ -358,18 +360,15 @@ func getGasPriceAndGasLimit(client *ethclient.Client, fee *request.Fee, to commo
 	var gasLimit uint64
 	var gasPrice *big.Int
 	var err error
+	var ok bool
 
 	if fee != nil {
-		n, ok := new(big.Int).SetString(fee.GasPrice, 10)
-		if ok {
-			// GWei to Wei
-			gasPrice = new(big.Int).Div(n, big.NewInt(params.GWei))
-		} else {
+		gasPrice, ok = new(big.Int).SetString(fee.GasPrice, 10)
+		if !ok {
 			return nil, 0, err
 		}
 	} else {
-		n := big.NewInt(ethGetGasPriceInGWei())
-		gasPrice = new(big.Int).Div(n, big.NewInt(params.GWei))
+		gasPrice = ethGetGasPriceInWei()
 	}
 
 	if fee != nil {
@@ -381,7 +380,7 @@ func getGasPriceAndGasLimit(client *ethclient.Client, fee *request.Fee, to commo
 		})
 	}
 
-	return gasPrice, gasLimit, nil
+	return gasPrice, gasLimit + 5000, nil
 }
 
 /**

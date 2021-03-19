@@ -7,6 +7,7 @@ import (
 	"github.com/go-playground/validator"
 	"github.com/tatumio/tatum-go/model/request"
 	"github.com/tatumio/tatum-go/model/response/offchain"
+	networkcfg "github.com/tatumio/tatum-go/network"
 	"github.com/tatumio/tatum-go/transaction/bitcoin_tx_builder"
 	"github.com/tatumio/tatum-go/wallet"
 	"strconv"
@@ -89,9 +90,9 @@ func (l *LitecoinOffchain) PrepareLitecoinSignedOffchainTransaction(testnet bool
 
 	var network *chaincfg.Params
 	if testnet {
-		network = &chaincfg.TestNet3Params
+		network = &networkcfg.LtcTestNet4Params
 	} else {
-		network = &chaincfg.MainNetParams
+		network = &networkcfg.LtcMainNetParams
 	}
 
 	var (

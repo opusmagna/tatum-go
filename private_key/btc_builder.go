@@ -80,8 +80,8 @@ func (p *btcPrivateKey) DerivePath(path string) BtcPrivateKey {
 			return &btcPrivateKey{}
 		}
 
-		pubKey, _ := p.key.Neuter()
-		fmt.Println(pubKey.String())
+		//pubKey, _ := p.key.Neuter()
+		//fmt.Println(pubKey.String())
 	}
 	return p
 }

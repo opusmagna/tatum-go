@@ -8,7 +8,7 @@ import (
 	bch "github.com/gcash/bchd/chaincfg"
 	bchkeychain "github.com/gcash/bchutil/hdkeychain"
 	"github.com/tatumio/tatum-go/model/request"
-	networkcfg "github.com/tatumio/tatum-go/network"
+	"github.com/tatumio/tatum-go/network/ltc"
 	"github.com/tatumio/tatum-go/private_key"
 	"github.com/tatumio/tatum-go/utils"
 )
@@ -48,9 +48,9 @@ func generateBtcAddress(testnet bool, xpub string, i uint32) string {
 func generateLtcAddress(testnet bool, xpub string, i uint32) string {
 	var network *chaincfg.Params
 	if testnet {
-		network = &networkcfg.LtcTestNet4Params
+		network = &ltc.LtcTestNet4Params
 	} else {
-		network = &networkcfg.LtcMainNetParams
+		network = &ltc.LtcMainNetParams
 	}
 	return generateAddress(network, xpub, i)
 }
@@ -161,10 +161,10 @@ func generateLtcPrivateKey(testnet bool, mnemonic string, i uint32) string {
 	var network *chaincfg.Params
 	var path string
 	if testnet {
-		network = &networkcfg.LtcTestNet4Params
+		network = &ltc.LtcTestNet4Params
 		path = utils.TestnetDerivationPath
 	} else {
-		network = &networkcfg.LtcMainNetParams
+		network = &ltc.LtcMainNetParams
 		path = utils.LtcDerivationPath
 	}
 

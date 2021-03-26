@@ -4,7 +4,8 @@ import (
 	"github.com/btcsuite/btcd/chaincfg"
 	bch "github.com/gcash/bchd/chaincfg"
 	"github.com/tatumio/tatum-go/model/request"
-	networkcfg "github.com/tatumio/tatum-go/network"
+	"github.com/tatumio/tatum-go/network/ltc"
+	"github.com/tatumio/tatum-go/network/vet"
 	"github.com/tatumio/tatum-go/private_key"
 	"github.com/tatumio/tatum-go/utils"
 )
@@ -73,10 +74,10 @@ func generateLtcWallet(testnet bool, mnemonic string) *Wallet {
 		path string
 	)
 	if testnet {
-		network = &networkcfg.LtcTestNet4Params
+		network = &ltc.LtcTestNet4Params
 		path = utils.TestnetDerivationPath
 	} else {
-		network = &networkcfg.LtcMainNetParams
+		network = &ltc.LtcMainNetParams
 		path = utils.LtcDerivationPath
 	}
 
@@ -108,6 +109,49 @@ func generateBchWallet(testnet bool, mnemonic string) *Wallet {
 }
 
 /**
+ * Generate VeChain wallet
+ *
+ * @param testnet testnet or mainnet version of address
+ * @param mnem    mnemonic seed to use
+ * @return the wallet
+ * @throws ExecutionException   the execution exception
+ * @throws InterruptedException the interrupted exception
+ * @returns wallet
+ */
+func generateVetWallet(testnet bool, mnemonic string) *Wallet {
+	var network *chaincfg.Params
+	network = &vet.VetMainNetParams
+
+	var (
+		path string
+	)
+
+	if testnet {
+		path = utils.TestnetDerivationPath
+	} else {
+		path = utils.VetDerivationPath
+	}
+
+	xpub := private_key.NewBtcPrivateKey().Network(network).FromSeed(mnemonic).DerivePath(path).Xpub()
+	return &Wallet{Mnemonic: mnemonic, Xpub: xpub}
+}
+
+//const path = testnet ? TESTNET_DERIVATION_PATH : VET_DERIVATION_PATH;
+//const hdwallet = ethHdKey.fromMasterSeed(await mnemonicToSeed(mnem));
+//const derivePath = hdwallet.derivePath(path);
+//return {
+//xpub: derivePath.publicExtendedKey().toString(),
+//mnemonic: mnem
+//};
+
+//List<ChildNumber> path = testnet ? HDUtils.parsePath(TESTNET_DERIVATION_PATH) : HDUtils.parsePath(VET_DERIVATION_PATH);
+//WalletBuilder walletBuilder = WalletBuilder.build().network(VET_MAINNET).fromSeed(mnem).derivePath(path);
+//Wallet wallet = new Wallet();
+//wallet.setMnemonic(mnem);
+//wallet.setXpub(walletBuilder.toBase58());
+//return wallet;
+
+/**
  * Generate wallet
  *
  * @param currency blockchain to generate wallet for
@@ -125,6 +169,8 @@ func GenerateWallet(currency request.Currency, testnet bool, mnemonic string) *W
 		return generateLtcWallet(testnet, mnemonic)
 	case request.BCH:
 		return generateBchWallet(testnet, mnemonic)
+	case request.VET:
+		return generateVetWallet(testnet, mnemonic)
 	default:
 		return &Wallet{}
 	}

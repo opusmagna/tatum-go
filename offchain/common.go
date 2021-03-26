@@ -43,9 +43,9 @@ func OffchainStoreWithdrawal(data request.CreateWithdrawal) *offchain.Withdrawal
 /**
  * For more details, see <a href="https://tatum.io/apidoc#operation/cancelInProgressWithdrawal" target="_blank">Tatum API documentation</a>
  */
-func OffchainCancelWithdrawal(id string, revert bool) {
+func OffchainCancelWithdrawal(id string, revert bool) (string, error) {
 	url, _ := url.Parse("/v3/offchain/withdrawal/" + id + "?revert=" + strconv.FormatBool(revert))
-	sender.SendDel(url.String(), nil)
+	return sender.SendDel(url.String(), nil)
 }
 
 /**

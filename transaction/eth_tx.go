@@ -38,7 +38,7 @@ type EthTx struct {
  * Estimate Gas price for the transaction.
  * @param client
  */
-func ethGetGasPriceInWei() *big.Int {
+func EthGetGasPriceInWei() *big.Int {
 	var result map[string]interface{}
 	res, err := http.Get("https://ethgasstation.info/json/ethgasAPI.json")
 	if err != nil {
@@ -117,7 +117,7 @@ func (b *EthTx) PrepareStoreDataTransaction(testnet bool, body request.CreateRec
 	}
 
 	gasLimit := uint64(len(body.Data)*68 + 21000)
-	gasPrice := ethGetGasPriceInWei()
+	gasPrice := EthGetGasPriceInWei()
 
 	return createRawTransaction(client, body.FromPrivateKey, body.Nonce, address, big.NewInt(0), gasLimit, gasPrice, []byte(body.Data))
 }
@@ -368,7 +368,7 @@ func getGasPriceAndGasLimit(client *ethclient.Client, fee *request.Fee, to commo
 			return nil, 0, err
 		}
 	} else {
-		gasPrice = ethGetGasPriceInWei()
+		gasPrice = EthGetGasPriceInWei()
 	}
 
 	if fee != nil {

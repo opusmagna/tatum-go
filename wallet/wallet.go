@@ -5,7 +5,6 @@ import (
 	bch "github.com/gcash/bchd/chaincfg"
 	"github.com/tatumio/tatum-go/model/request"
 	"github.com/tatumio/tatum-go/network/ltc"
-	"github.com/tatumio/tatum-go/network/vet"
 	"github.com/tatumio/tatum-go/private_key"
 	"github.com/tatumio/tatum-go/utils"
 )
@@ -120,8 +119,7 @@ func generateBchWallet(testnet bool, mnemonic string) *Wallet {
  */
 func generateVetWallet(testnet bool, mnemonic string) *Wallet {
 	var network *chaincfg.Params
-	network = &vet.VetMainNetParams
-
+	network = &chaincfg.MainNetParams
 	var (
 		path string
 	)
@@ -136,20 +134,29 @@ func generateVetWallet(testnet bool, mnemonic string) *Wallet {
 	return &Wallet{Mnemonic: mnemonic, Xpub: xpub}
 }
 
-//const path = testnet ? TESTNET_DERIVATION_PATH : VET_DERIVATION_PATH;
-//const hdwallet = ethHdKey.fromMasterSeed(await mnemonicToSeed(mnem));
-//const derivePath = hdwallet.derivePath(path);
-//return {
-//xpub: derivePath.publicExtendedKey().toString(),
-//mnemonic: mnem
-//};
+/**
+ * Generate Ethereum or any other ERC20 wallet
+ * @param testnet testnet or mainnet version of address
+ * @param mnem mnemonic seed to use
+ * @returns wallet
+ */
+func generateEthWallet(testnet bool, mnemonic string) *Wallet {
+	var network *chaincfg.Params
+	network = &chaincfg.MainNetParams
 
-//List<ChildNumber> path = testnet ? HDUtils.parsePath(TESTNET_DERIVATION_PATH) : HDUtils.parsePath(VET_DERIVATION_PATH);
-//WalletBuilder walletBuilder = WalletBuilder.build().network(VET_MAINNET).fromSeed(mnem).derivePath(path);
-//Wallet wallet = new Wallet();
-//wallet.setMnemonic(mnem);
-//wallet.setXpub(walletBuilder.toBase58());
-//return wallet;
+	var (
+		path string
+	)
+
+	if testnet {
+		path = utils.TestnetDerivationPath
+	} else {
+		path = utils.EthDerivationPath
+	}
+
+	xpub := private_key.NewBtcPrivateKey().Network(network).FromSeed(mnemonic).DerivePath(path).Xpub()
+	return &Wallet{Mnemonic: mnemonic, Xpub: xpub}
+}
 
 /**
  * Generate wallet
@@ -171,6 +178,8 @@ func GenerateWallet(currency request.Currency, testnet bool, mnemonic string) *W
 		return generateBchWallet(testnet, mnemonic)
 	case request.VET:
 		return generateVetWallet(testnet, mnemonic)
+	case request.ETH:
+		return generateEthWallet(testnet, mnemonic)
 	default:
 		return &Wallet{}
 	}

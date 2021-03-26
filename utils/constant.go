@@ -13,6 +13,7 @@ const BtcDerivationPath = "M/44H/0H/0H/0"
 const LtcDerivationPath = "M/44H/2H/0H/0"
 const BchDerivationPath = "M/44H/145H/0H/0"
 const VetDerivationPath = "M/44H/818H/0H/0"
+const EthDerivationPath = "M/44H/60H/0H/0"
 
 /**
  * The constant TRANSFER_METHOD_ABI.

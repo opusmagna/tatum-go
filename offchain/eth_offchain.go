@@ -102,7 +102,7 @@ func (e *EthereumOffchain) SendEthOffchainTransaction(testnet bool, body request
 	amount := withdrawal.Amount
 	address := withdrawal.Address
 
-	txData, gasLimit, err := e.PrepareEthSignedOffchainTransaction(amount, fromPriv, address, account.Currency, client,
+	txData, gasLimit, err := e.PrepareEthSignedOffchainTransaction(testnet, amount, fromPriv, address, account.Currency, client,
 		gasPrice.String(), body.BaseTransferEthErc20Offchain.Nonce)
 	if err != nil {
 		return nil, err
@@ -216,7 +216,7 @@ func (e *EthereumOffchain) SendEthErc20OffchainTransaction(testnet bool, body re
 	v := ledger.VC{}
 	vc := v.GetVirtualCurrencyByName(account.Currency)
 
-	txData, gasLimit, err := e.PrepareEthErc20SignedOffchainTransaction(withdrawal.Amount, fromPriv,
+	txData, gasLimit, err := e.PrepareEthErc20SignedOffchainTransaction(testnet, withdrawal.Amount, fromPriv,
 		withdrawal.Address, client, vc.Erc20Address, gasPrice.String(), body.BaseTransferEthErc20Offchain.Nonce)
 
 	if err != nil {
@@ -274,7 +274,7 @@ func findEthBased(arr []string, f string) bool {
  * @param nonce nonce of the transaction. this is counter of the transactions from given address. should be + 1 from previous one.
  * @returns transaction data to be broadcast to blockchain.
  */
-func (e *EthereumOffchain) PrepareEthSignedOffchainTransaction(amount string, privateKey string, address string,
+func (e *EthereumOffchain) PrepareEthSignedOffchainTransaction(testnet bool, amount string, privateKey string, address string,
 	currency string, client *ethclient.Client, gasPrice string, nonce uint64) (string, uint64, error) {
 
 	var to common.Address
@@ -284,7 +284,6 @@ func (e *EthereumOffchain) PrepareEthSignedOffchainTransaction(amount string, pr
 	if currency == request.ETH {
 		to = common.HexToAddress(address)
 		value = utils.Ether2Wei(amount)
-		//data = []byte(hex.EncodeToString([]byte(body.Data)))
 
 	} else {
 		to = common.HexToAddress(utils.ContractAddresses()(currency))
@@ -320,7 +319,7 @@ func (e *EthereumOffchain) PrepareEthSignedOffchainTransaction(amount string, pr
 		return "", 0, err
 	}
 
-	rawTx, err := createRawTransaction(client, privateKey, nonce, to, value, gasLimit, _gasPrice, data)
+	rawTx, err := createRawTransaction(testnet, client, privateKey, nonce, to, value, gasLimit, _gasPrice, data)
 	if err != nil {
 		return "", 0, err
 	}
@@ -341,7 +340,7 @@ func (e *EthereumOffchain) PrepareEthSignedOffchainTransaction(amount string, pr
  * @returns transaction data to be broadcast to blockchain.
  */
 
-func (e *EthereumOffchain) PrepareEthErc20SignedOffchainTransaction(amount string, privateKey string, address string,
+func (e *EthereumOffchain) PrepareEthErc20SignedOffchainTransaction(testnet bool, amount string, privateKey string, address string,
 	client *ethclient.Client, tokenAddress string, gasPrice string, nonce uint64) (string, uint64, error) {
 
 	var value *big.Int
@@ -379,7 +378,7 @@ func (e *EthereumOffchain) PrepareEthErc20SignedOffchainTransaction(amount strin
 		return "", 0, errors.New("invalid gas price")
 	}
 
-	rawTx, err := createRawTransaction(client, privateKey, nonce, to, value, gasLimit, _gasPrice, data)
+	rawTx, err := createRawTransaction(testnet, client, privateKey, nonce, to, value, gasLimit, _gasPrice, data)
 	if err != nil {
 		return "", 0, err
 	}
@@ -387,7 +386,7 @@ func (e *EthereumOffchain) PrepareEthErc20SignedOffchainTransaction(amount strin
 	return rawTx, gasLimit, nil
 }
 
-func createRawTransaction(client *ethclient.Client, prv string,
+func createRawTransaction(testnet bool, client *ethclient.Client, prv string,
 	nonce uint64, to common.Address, amount *big.Int, gasLimit uint64, gasPrice *big.Int, data []byte) (string, error) {
 
 	privateKey, err := crypto.HexToECDSA(strings.Replace(prv, "0x", "", 1))
@@ -398,14 +397,14 @@ func createRawTransaction(client *ethclient.Client, prv string,
 
 	tx := types.NewTransaction(nonce, to, amount, gasLimit, gasPrice, data)
 
-	//chainID, err := client.NetworkID(context.Background())
-	//	log.Fatal(err)
-	//if err != nil {
-	//return "", err
-	//}
+	var chainID *big.Int
+	if testnet {
+		chainID = big.NewInt(3) // Ropsten
+	} else {
+		chainID = big.NewInt(1) // Mainnet
+	}
 
-	//signedTx, err := types.SignTx(tx, types.NewEIP155Signer(big.NewInt(1)), privateKey)
-	signedTx, err := types.SignTx(tx, types.HomesteadSigner{}, privateKey)
+	signedTx, err := types.SignTx(tx, types.NewEIP155Signer(chainID), privateKey)
 	if err != nil {
 		log.Fatal(err)
 		return "", err

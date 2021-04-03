@@ -17,7 +17,6 @@ import (
 	"github.com/tatumio/tatum-go/ledger"
 	"github.com/tatumio/tatum-go/model/request"
 	"github.com/tatumio/tatum-go/model/response/offchain"
-	"github.com/tatumio/tatum-go/transaction"
 	"github.com/tatumio/tatum-go/utils"
 	"github.com/tatumio/tatum-go/wallet"
 	"golang.org/x/crypto/sha3"
@@ -93,7 +92,7 @@ func (e *EthereumOffchain) SendEthOffchainTransaction(testnet bool, body request
 
 		gasPrice = new(big.Int).Mul(gasPrice, big.NewInt(params.GWei)) // GWei to Wei
 	} else {
-		gasPrice = transaction.EthGetGasPriceInWei()
+		gasPrice = utils.EthGetGasPriceInWei()
 	}
 
 	var accountLedger = ledger.AccountLedger{}
@@ -203,7 +202,7 @@ func (e *EthereumOffchain) SendEthErc20OffchainTransaction(testnet bool, body re
 
 		gasPrice = new(big.Int).Mul(gasPrice, big.NewInt(params.GWei)) // GWei to Wei
 	} else {
-		gasPrice = transaction.EthGetGasPriceInWei()
+		gasPrice = utils.EthGetGasPriceInWei()
 	}
 
 	var accountLedger = ledger.AccountLedger{}

@@ -8,7 +8,7 @@ import (
 	"github.com/tatumio/tatum-go/model/request"
 	"github.com/tatumio/tatum-go/model/response/offchain"
 	"github.com/tatumio/tatum-go/network/ltc"
-	"github.com/tatumio/tatum-go/transaction/bitcoin_tx_builder"
+	"github.com/tatumio/tatum-go/transaction"
 	"github.com/tatumio/tatum-go/wallet"
 	"strconv"
 	"strings"
@@ -98,7 +98,7 @@ func (l *LitecoinOffchain) PrepareLitecoinSignedOffchainTransaction(testnet bool
 	}
 
 	var (
-		txBuilder = bitcoin_tx_builder.New().Init(network)
+		txBuilder = transaction.New().Init(network)
 	)
 
 	if len(multipleAmounts) > 0 {

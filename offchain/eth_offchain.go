@@ -319,7 +319,7 @@ func (e *EthereumOffchain) PrepareEthSignedOffchainTransaction(testnet bool, amo
 		return "", 0, err
 	}
 
-	rawTx, err := createRawTransaction(testnet, client, privateKey, nonce, to, value, gasLimit, _gasPrice, data)
+	rawTx, err := createRawTransaction(testnet, privateKey, nonce, to, value, gasLimit, _gasPrice, data)
 	if err != nil {
 		return "", 0, err
 	}
@@ -378,7 +378,7 @@ func (e *EthereumOffchain) PrepareEthErc20SignedOffchainTransaction(testnet bool
 		return "", 0, errors.New("invalid gas price")
 	}
 
-	rawTx, err := createRawTransaction(testnet, client, privateKey, nonce, to, value, gasLimit, _gasPrice, data)
+	rawTx, err := createRawTransaction(testnet, privateKey, nonce, to, value, gasLimit, _gasPrice, data)
 	if err != nil {
 		return "", 0, err
 	}
@@ -386,7 +386,7 @@ func (e *EthereumOffchain) PrepareEthErc20SignedOffchainTransaction(testnet bool
 	return rawTx, gasLimit, nil
 }
 
-func createRawTransaction(testnet bool, client *ethclient.Client, prv string,
+func createRawTransaction(testnet bool, prv string,
 	nonce uint64, to common.Address, amount *big.Int, gasLimit uint64, gasPrice *big.Int, data []byte) (string, error) {
 
 	privateKey, err := crypto.HexToECDSA(strings.Replace(prv, "0x", "", 1))

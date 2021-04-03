@@ -63,10 +63,12 @@ func (bc *BcashOffchain) SendBitcoinCashOffchainTransaction(testnet bool, body r
 
 	txHash, err := OffchainBroadcast(broadcastWithdrawal)
 	if err != nil {
-		OffchainCancelWithdrawal(id, true)
-		return nil, err
+		_, err1 := OffchainCancelWithdrawal(id, true)
+		if err1 == nil {
+			return nil, err
+		}
+		return &offchain.BroadcastResult{TxHash: nil, Id: id}, nil
 	}
-
 	return &offchain.BroadcastResult{TxHash: txHash, Id: id}, nil
 
 }

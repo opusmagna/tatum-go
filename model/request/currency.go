@@ -15,6 +15,7 @@ const (
 	USDT          = "USDT"
 	LEO           = "LEO"
 	LINK          = "LINK"
+	WBTC          = "WBTC"
 	UNI           = "UNI"
 	FREE          = "FREE"
 	MKR           = "MKR"

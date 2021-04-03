@@ -196,6 +196,7 @@ func GenerateWallet(currency request.Currency, testnet bool, mnemonic string) *W
 	case request.MMY:
 		return generateEthWallet(testnet, mnemonic)
 	default:
-		return &Wallet{}
+		return nil
 	}
+	return nil
 }

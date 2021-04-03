@@ -1,6 +1,7 @@
 package private_key
 
 import (
+	"encoding/hex"
 	"fmt"
 	"github.com/btcsuite/btcd/chaincfg"
 	"github.com/btcsuite/btcutil"
@@ -17,6 +18,7 @@ type BtcPrivateKey interface {
 	DerivePath(path string) BtcPrivateKey
 	Derive(i uint32) BtcPrivateKey
 	ToWIF() string
+	ToHex() string
 	Xpub() string
 }
 
@@ -120,4 +122,13 @@ func (p *btcPrivateKey) Xpub() string {
 	}
 
 	return pubKey.String()
+}
+func (p *btcPrivateKey) ToHex() string {
+	privKey, err := p.key.ECPrivKey()
+	if err != nil {
+		fmt.Println(err)
+		return utils.EmptySpace
+	}
+
+	return hex.EncodeToString(privKey.Serialize())
 }

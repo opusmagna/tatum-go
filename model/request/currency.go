@@ -28,6 +28,7 @@ const (
 	XCON          = "XCON"
 	MMY           = "MMY"
 	PAXG          = "PAXG"
+	TRON          = "TRON"
 )
 
 var currencies = [...]string{"BTC",

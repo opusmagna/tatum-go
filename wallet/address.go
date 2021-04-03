@@ -376,7 +376,22 @@ func GenerateAddressFromXPub(currency request.Currency, testnet bool, xpub strin
 		return generateLtcAddress(testnet, xpub, i)
 	case request.BCH:
 		return generateBchAddress(testnet, xpub, i)
+	case request.USDT:
+	case request.WBTC:
+	case request.LEO:
+	case request.LINK:
+	case request.UNI:
+	case request.FREE:
+	case request.MKR:
+	case request.USDC:
+	case request.BAT:
+	case request.TUSD:
+	case request.PAX:
+	case request.PAXG:
+	case request.PLTC:
+	case request.XCON:
 	case request.ETH:
+	case request.MMY:
 	case request.VET:
 		return generateEthAddress(testnet, xpub, i)
 	default:

@@ -20,7 +20,7 @@ type Address struct {
 	 * @type {number}
 	 * @memberof Address
 	 */
-	DerivationKey uint64
+	DerivationKey uint32
 	/**
 	 * Extended public key to derive address from. In case of XRP, this is account address,
 	 * since address is defined as DestinationTag, which is address field. In case of XLM, this is account address, since address is defined as message, which is address field.

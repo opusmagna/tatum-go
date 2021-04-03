@@ -41,3 +41,27 @@ func TestGenerateWallet_BCH(t *testing.T) {
 	assert.Equal(t, "xpub6EafivSZvqR8ysLKS52NDKfn16sB9uhCEfCKdYi7PpGqqK3fJGdd53DzUnWYvFRZKAC7pB8FVnvuJKkJparfjjfVPTQTmC7dfC6aVvw6f98", mainnet.Xpub, "they should be equal")
 	assert.Equal(t, mnemonic, mainnet.Mnemonic, "they should be equal")
 }
+
+func TestGenerateWallet_VET(t *testing.T) {
+	mnemonic := "quantum tobacco key they maid mean crime youth chief jungle mind design broken tilt bus shoulder leaf good forward erupt split divert bread kitten"
+
+	testnet := GenerateWallet(request.VET, true, mnemonic)
+	assert.Equal(t, "xpub6FMiQpA54nciqs52guGVdWQ5TonZt5XtGsFpurgtttL7H3mSfaJDXv5aBdThjX6tW9HYaJSQ8wZVnLm1ixaQUu1MRQCwvwZ6U2cX6mwWT25", testnet.Xpub, "they should be equal")
+	assert.Equal(t, mnemonic, testnet.Mnemonic, "they should be equal")
+
+	mainnet := GenerateWallet(request.VET, false, mnemonic)
+	assert.Equal(t, "xpub6EzJLu3Hi5hEFAkiZAxCTaXqXoS95seTnG1tdYdF8fBcVZCfR8GQP8UGvfF52szpwZqiiGHJw5694emxSpYBE5qDxAZUgiHLzbVhb5ErRMa", mainnet.Xpub, "they should be equal")
+	assert.Equal(t, mnemonic, mainnet.Mnemonic, "they should be equal")
+}
+
+func TestGenerateWallet_ETH(t *testing.T) {
+	mnemonic := "quantum tobacco key they maid mean crime youth chief jungle mind design broken tilt bus shoulder leaf good forward erupt split divert bread kitten"
+
+	testnet := GenerateWallet(request.ETH, true, mnemonic)
+	assert.Equal(t, "xpub6FMiQpA54nciqs52guGVdWQ5TonZt5XtGsFpurgtttL7H3mSfaJDXv5aBdThjX6tW9HYaJSQ8wZVnLm1ixaQUu1MRQCwvwZ6U2cX6mwWT25", testnet.Xpub, "they should be equal")
+	assert.Equal(t, mnemonic, testnet.Mnemonic, "they should be equal")
+
+	mainnet := GenerateWallet(request.ETH, false, mnemonic)
+	assert.Equal(t, "xpub6DtR524VQx3ENj2E9pNZnjqkVp47YN5sRCP5y4Gs6KZTwDhH9HTVX8shJPt74WaPZRftRXFfnsyPbMPh6DMEmrQ2WBxDJzGxriStAB36bQM", mainnet.Xpub, "they should be equal")
+	assert.Equal(t, mnemonic, mainnet.Mnemonic, "they should be equal")
+}

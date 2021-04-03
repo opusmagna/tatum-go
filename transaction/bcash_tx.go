@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/btcsuite/btcutil"
-	"github.com/gcash/bchd/chaincfg"
+	bchcfg "github.com/gcash/bchd/chaincfg"
 	"github.com/go-playground/validator"
 	"github.com/tatumio/tatum-go/model/request"
 	"github.com/tatumio/tatum-go/model/response/bch"
@@ -32,11 +32,11 @@ func (b *BitcoinTx) prepareBitcoinCashSignedTransaction(testnet bool, body reque
 	fromUTXO := body.FromUTXO
 	to := body.To
 
-	var network *chaincfg.Params
+	var network *bchcfg.Params
 	if testnet {
-		network = &chaincfg.TestNet3Params
+		network = &bchcfg.TestNet3Params
 	} else {
-		network = &chaincfg.MainNetParams
+		network = &bchcfg.MainNetParams
 	}
 
 	var txHash = make([]string, 0)

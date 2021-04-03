@@ -36,6 +36,16 @@ func TestGenerateAddressFromXPub_BCH(t *testing.T) {
 	assert.Equal(t, "bitcoincash:qr9wgjtyjd4q60323gd2ytsv5w3thl92rclzrklply", address, "they should be equal")
 }
 
+func TestGenerateAddressFromXPub_ETH(t *testing.T) {
+	xpub_test := "xpub6FMiQpA54nciqs52guGVdWQ5TonZt5XtGsFpurgtttL7H3mSfaJDXv5aBdThjX6tW9HYaJSQ8wZVnLm1ixaQUu1MRQCwvwZ6U2cX6mwWT25"
+	address_test := GenerateAddressFromXPub(request.ETH, true, xpub_test, 1)
+	assert.Equal(t, "0x8cb76aed9c5e336ef961265c6079c14e9cd3d2ea", address_test, "they should be equal")
+
+	xpub := "xpub6DtR524VQx3ENj2E9pNZnjqkVp47YN5sRCP5y4Gs6KZTwDhH9HTVX8shJPt74WaPZRftRXFfnsyPbMPh6DMEmrQ2WBxDJzGxriStAB36bQM"
+	address := GenerateAddressFromXPub(request.ETH, false, xpub, 1)
+	assert.Equal(t, "0xaac8c73348f1f92b2f9647e1e4f3cf14e2a8b3cb", address, "they should be equal")
+}
+
 func TestGenerateAddressFromXPub_VET(t *testing.T) {
 	xpub_test := "xpub6FMiQpA54nciqs52guGVdWQ5TonZt5XtGsFpurgtttL7H3mSfaJDXv5aBdThjX6tW9HYaJSQ8wZVnLm1ixaQUu1MRQCwvwZ6U2cX6mwWT25"
 	address_test := GenerateAddressFromXPub(request.VET, true, xpub_test, 1)

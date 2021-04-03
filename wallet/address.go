@@ -5,6 +5,7 @@ import (
 	"github.com/btcsuite/btcd/chaincfg"
 	"github.com/btcsuite/btcutil"
 	"github.com/btcsuite/btcutil/hdkeychain"
+	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/crypto"
 	bch "github.com/gcash/bchd/chaincfg"
 	bchkeychain "github.com/gcash/bchutil/hdkeychain"
@@ -12,7 +13,7 @@ import (
 	"github.com/tatumio/tatum-go/network/ltc"
 	"github.com/tatumio/tatum-go/private_key"
 	"github.com/tatumio/tatum-go/utils"
-	"strings"
+	"golang.org/x/crypto/sha3"
 )
 
 /**
@@ -127,36 +128,11 @@ func generateEthAddress(testnet bool, xpub string, i uint32) string {
 		return utils.EmptySpace
 	}
 
-	return strings.ToLower(crypto.PubkeyToAddress(*pubKey.ToECDSA()).Hex())
-}
+	publicKeyBytes := crypto.FromECDSAPub(pubKey.ToECDSA())
+	hash := sha3.NewLegacyKeccak256()
+	hash.Write(publicKeyBytes[1:])
 
-/**
- * Generate VeChain address
- * @param testnet testnet or mainnet version of address
- * @param xpub extended public key to generate address from
- * @param i derivation index of address to generate. Up to 2^31 addresses can be generated.
- * @returns blockchain address
- */
-func generateVetAddress(testnet bool, xpub string, i uint32) string {
-	key, err := hdkeychain.NewKeyFromString(xpub)
-	if err != nil {
-		fmt.Println(err)
-		return utils.WhiteSpace
-	}
-
-	key, err = key.Derive(i)
-	if err != nil {
-		fmt.Println(err)
-		return utils.EmptySpace
-	}
-
-	pubKey, err := key.ECPubKey()
-	if err != nil {
-		fmt.Println(err)
-		return utils.EmptySpace
-	}
-
-	return strings.ToLower(crypto.PubkeyToAddress(*pubKey.ToECDSA()).Hex())
+	return hexutil.Encode(hash.Sum(nil)[12:])
 }
 
 func generateAddress(network *chaincfg.Params, xpub string, i uint32) string {
@@ -377,27 +353,42 @@ func GenerateAddressFromXPub(currency request.Currency, testnet bool, xpub strin
 	case request.BCH:
 		return generateBchAddress(testnet, xpub, i)
 	case request.USDT:
+		fallthrough
 	case request.WBTC:
+		fallthrough
 	case request.LEO:
+		fallthrough
 	case request.LINK:
+		fallthrough
 	case request.UNI:
+		fallthrough
 	case request.FREE:
+		fallthrough
 	case request.MKR:
+		fallthrough
 	case request.USDC:
+		fallthrough
 	case request.BAT:
+		fallthrough
 	case request.TUSD:
+		fallthrough
 	case request.PAX:
+		fallthrough
 	case request.PAXG:
+		fallthrough
 	case request.PLTC:
+		fallthrough
 	case request.XCON:
+		fallthrough
 	case request.ETH:
+		fallthrough
 	case request.MMY:
+		fallthrough
 	case request.VET:
 		return generateEthAddress(testnet, xpub, i)
 	default:
 		return utils.EmptySpace
 	}
-	return utils.EmptySpace
 }
 
 /**
@@ -420,27 +411,42 @@ func GeneratePrivateKeyFromMnemonic(currency request.Currency, testnet bool, mne
 	case request.BCH:
 		return generateBchPrivateKey(testnet, mnemonic, i)
 	case request.USDT:
+		fallthrough
 	case request.WBTC:
+		fallthrough
 	case request.LEO:
+		fallthrough
 	case request.LINK:
+		fallthrough
 	case request.UNI:
+		fallthrough
 	case request.FREE:
+		fallthrough
 	case request.MKR:
+		fallthrough
 	case request.USDC:
+		fallthrough
 	case request.BAT:
+		fallthrough
 	case request.TUSD:
+		fallthrough
 	case request.PAX:
+		fallthrough
 	case request.PAXG:
+		fallthrough
 	case request.PLTC:
+		fallthrough
 	case request.XCON:
+		fallthrough
 	case request.ETH:
+		fallthrough
 	case request.MMY:
-	case request.VET:
 		return generateEthPrivateKey(testnet, mnemonic, i)
+	case request.VET:
+		return generateVetPrivateKey(testnet, mnemonic, i)
 	case request.TRON:
 		return generateTronPrivateKey(testnet, mnemonic, i)
 	default:
 		return utils.WhiteSpace
 	}
-	return utils.WhiteSpace
 }

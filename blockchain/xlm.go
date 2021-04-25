@@ -21,8 +21,14 @@ func (x *Xlm) XlmGetAccountInfo(account string) *xlm.Sequence {
 		fmt.Println(err.Error())
 		return nil
 	}
+
 	var result map[string]interface{}
-	json.Unmarshal([]byte(res), &result)
+	err = json.Unmarshal([]byte(res), &result)
+	if err != nil {
+		fmt.Println(err.Error())
+		return nil
+	}
+
 	return &xlm.Sequence{Sequence: result["sequence"].(string)}
 }
 
@@ -48,10 +54,18 @@ func (x *Xlm) XlmBroadcast(txData string, signatureId string) *common.Transactio
 	txHash := common.TransactionHash{}
 	var result map[string]interface{}
 	res, err := sender.SendPost(url, requestJSON)
-	if err == nil {
-		json.Unmarshal([]byte(res), &result)
-		txHash.TxId = fmt.Sprint(result["txId"])
+	if err != nil {
+		fmt.Println(err.Error())
+		return nil
 	}
+
+	err = json.Unmarshal([]byte(res), &result)
+	if err != nil {
+		fmt.Println(err.Error())
+		return nil
+	}
+	txHash.TxId = fmt.Sprint(result["txId"])
+
 	return &txHash
 }
 

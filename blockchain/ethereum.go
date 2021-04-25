@@ -17,7 +17,7 @@ type Ethereum struct {
  * For more details, see <a href="https://tatum.io/apidoc#operation/EthBroadcast" target="_blank">Tatum API documentation</a>
  */
 func (e *Ethereum) EthBroadcast(txData string, signatureId string) *common.TransactionHash {
-	url := "/v3/ethereum/broadcast"
+	_url := "/v3/ethereum/broadcast"
 
 	payload := make(map[string]interface{})
 	payload["txData"] = txData
@@ -34,11 +34,19 @@ func (e *Ethereum) EthBroadcast(txData string, signatureId string) *common.Trans
 
 	txHash := common.TransactionHash{}
 	var result map[string]interface{}
-	res, err := sender.SendPost(url, requestJSON)
-	if err == nil {
-		json.Unmarshal([]byte(res), &result)
-		txHash.TxId = fmt.Sprint(result["txId"])
+	res, err := sender.SendPost(_url, requestJSON)
+	if err != nil {
+		fmt.Println(err.Error())
+		return nil
 	}
+
+	err = json.Unmarshal([]byte(res), &result)
+	if err != nil {
+		fmt.Println(err)
+		return nil
+	}
+	txHash.TxId = fmt.Sprint(result["txId"])
+
 	return &txHash
 }
 
@@ -46,8 +54,8 @@ func (e *Ethereum) EthBroadcast(txData string, signatureId string) *common.Trans
  * For more details, see <a href="https://tatum.io/apidoc#operation/EthGetTransactionCount" target="_blank">Tatum API documentation</a>
  */
 func (e *Ethereum) EthGetTransactionsCount(address string) uint64 {
-	url := "/v3/ethereum/transaction/count/" + address
-	res, err := sender.SendGet(url, nil)
+	_url := "/v3/ethereum/transaction/count/" + address
+	res, err := sender.SendGet(_url, nil)
 	if err != nil {
 		fmt.Println(err.Error())
 		return 0
@@ -66,8 +74,8 @@ func (e *Ethereum) EthGetTransactionsCount(address string) uint64 {
  * For more details, see <a href="https://tatum.io/apidoc#operation/EthGetCurrentBlock" target="_blank">Tatum API documentation</a>
  */
 func (e *Ethereum) EthGetCurrentBlock() uint32 {
-	url := "/v3/ethereum/block/current"
-	res, err := sender.SendGet(url, nil)
+	_url := "/v3/ethereum/block/current"
+	res, err := sender.SendGet(_url, nil)
 	if err != nil {
 		fmt.Println(err.Error())
 		count, err := strconv.Atoi(res)
@@ -82,15 +90,21 @@ func (e *Ethereum) EthGetCurrentBlock() uint32 {
  * For more details, see <a href="https://tatum.io/apidoc#operation/EthGetBlock" target="_blank">Tatum API documentation</a>
  */
 func (e *Ethereum) EthGetBlock(hash string) *eth.Block {
-	url := "/v3/ethereum/block/" + hash
+	_url := "/v3/ethereum/block/" + hash
 	var block eth.Block
-	res, err := sender.SendGet(url, nil)
+	res, err := sender.SendGet(_url, nil)
 	fmt.Println(res)
 	if err != nil {
 		fmt.Println(err.Error())
 		return nil
 	}
-	json.Unmarshal([]byte(res), &block)
+
+	err = json.Unmarshal([]byte(res), &block)
+	if err != nil {
+		fmt.Println(err.Error())
+		return nil
+	}
+
 	return &block
 }
 
@@ -98,23 +112,23 @@ func (e *Ethereum) EthGetBlock(hash string) *eth.Block {
  * For more details, see <a href="https://tatum.io/apidoc#operation/EthGetBalance" target="_blank">Tatum API documentation</a>
  */
 func (e *Ethereum) EthGetAccountBalance(address string) decimal.Decimal {
-	url := "/v3/ethereum/account/balance/" + address
-	res, err := sender.SendGet(url, nil)
+	_url := "/v3/ethereum/account/balance/" + address
+	res, err := sender.SendGet(_url, nil)
 	if err != nil {
-		fmt.Errorf(err.Error())
+		fmt.Println(err.Error())
 		return decimal.Zero
 	}
 
 	var result map[string]interface{}
 	err = json.Unmarshal([]byte(res), &result)
 	if err != nil {
-		fmt.Errorf(err.Error())
+		fmt.Println(err.Error())
 		return decimal.Zero
 	}
 
 	balance, err := decimal.NewFromString(result["balance"].(string))
 	if err != nil {
-		fmt.Errorf(err.Error())
+		fmt.Println(err.Error())
 		return decimal.Zero
 	}
 
@@ -125,19 +139,25 @@ func (e *Ethereum) EthGetAccountBalance(address string) decimal.Decimal {
  * For more details, see <a href="https://tatum.io/apidoc#operation/EthErc20GetBalance" target="_blank">Tatum API documentation</a>
  */
 func (e *Ethereum) EthGetAccountErc20Address(address string, contractAddress string) *common.Balance {
-	url, _ := url.Parse("/v3/ethereum/account/balance/erc20/" + address)
-	q := url.Query()
+	_url, _ := url.Parse("/v3/ethereum/account/balance/erc20/" + address)
+	q := _url.Query()
 	q.Add("contractAddress", contractAddress)
-	url.RawQuery = q.Encode()
-	fmt.Println(url.String())
+	_url.RawQuery = q.Encode()
+	fmt.Println(_url.String())
 
 	var balance common.Balance
-	res, err := sender.SendGet(url.String(), nil)
+	res, err := sender.SendGet(_url.String(), nil)
 	if err != nil {
 		fmt.Println(err.Error())
 		return nil
 	}
-	json.Unmarshal([]byte(res), &balance)
+
+	err = json.Unmarshal([]byte(res), &balance)
+	if err != nil {
+		fmt.Println(err.Error())
+		return nil
+	}
+
 	return &balance
 }
 
@@ -145,14 +165,20 @@ func (e *Ethereum) EthGetAccountErc20Address(address string, contractAddress str
  * For more details, see <a href="https://tatum.io/apidoc#operation/EthGetTransaction" target="_blank">Tatum API documentation</a>
  */
 func (e *Ethereum) EthGetTransaction(hash string) *eth.Tx {
-	url := "/v3/ethereum/transaction/" + hash
+	_url := "/v3/ethereum/transaction/" + hash
 	var tx eth.Tx
-	res, err := sender.SendGet(url, nil)
+	res, err := sender.SendGet(_url, nil)
 	if err != nil {
 		fmt.Println(err.Error())
 		return nil
 	}
-	json.Unmarshal([]byte(res), &tx)
+
+	err = json.Unmarshal([]byte(res), &tx)
+	if err != nil {
+		fmt.Println(err.Error())
+		return nil
+	}
+
 	return &tx
 
 }
@@ -161,19 +187,25 @@ func (e *Ethereum) EthGetTransaction(hash string) *eth.Tx {
  * For more details, see <a href="https://tatum.io/apidoc#operation/EthGetTransactionByAddress" target="_blank">Tatum API documentation</a>
  */
 func (e *Ethereum) EthGetAccountTransactions(address string, pageSize uint32, offset uint32) *[]eth.Tx {
-	url, _ := url.Parse("/v3/ethereum/account/transaction/" + address)
-	q := url.Query()
+	_url, _ := url.Parse("/v3/ethereum/account/transaction/" + address)
+	q := _url.Query()
 	q.Add("offset", strconv.FormatUint(uint64(offset), 10))
 	q.Add("pageSize", strconv.FormatUint(uint64(pageSize), 10))
-	url.RawQuery = q.Encode()
-	fmt.Println(url.String())
+	_url.RawQuery = q.Encode()
+	fmt.Println(_url.String())
 
 	var txs []eth.Tx
-	res, err := sender.SendGet(url.String(), nil)
+	res, err := sender.SendGet(_url.String(), nil)
 	if err != nil {
 		fmt.Println(err.Error())
 		return nil
 	}
-	json.Unmarshal([]byte(res), &txs)
+
+	err = json.Unmarshal([]byte(res), &txs)
+	if err != nil {
+		fmt.Println(err.Error())
+		return nil
+	}
+
 	return &txs
 }

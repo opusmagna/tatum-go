@@ -17,8 +17,8 @@ type Xrp struct {
  * For more details, see <a href="https://tatum.io/apidoc#operation/XrpGetFee" target="_blank">Tatum API documentation</a>
  */
 func (x *Xrp) XrpGetFee() uint32 {
-	url := "/v3/xrp/fee"
-	res, err := sender.SendGet(url, nil)
+	_url := "/v3/xrp/fee"
+	res, err := sender.SendGet(_url, nil)
 	if err != nil {
 		fmt.Println(err.Error())
 		return 0
@@ -45,8 +45,8 @@ func (x *Xrp) XrpGetFee() uint32 {
  */
 func (x *Xrp) XrpGetAccountInfo(account string) *xrp.AccountInfo {
 
-	url := "/v3/xrp/account/" + account
-	res, err := sender.SendGet(url, nil)
+	_url := "/v3/xrp/account/" + account
+	res, err := sender.SendGet(_url, nil)
 	if err != nil {
 		fmt.Println(err.Error())
 		return nil
@@ -71,7 +71,7 @@ func (x *Xrp) XrpGetAccountInfo(account string) *xrp.AccountInfo {
  * For more details, see <a href="https://tatum.io/apidoc#operation/XrpBroadcast" target="_blank">Tatum API documentation</a>
  */
 func (x *Xrp) XrpBroadcast(txData string, signatureId string) *common.TransactionHash {
-	url := "/v3/xrp/broadcast"
+	_url := "/v3/xrp/broadcast"
 
 	payload := make(map[string]interface{})
 	payload["txData"] = txData
@@ -88,11 +88,19 @@ func (x *Xrp) XrpBroadcast(txData string, signatureId string) *common.Transactio
 
 	var txHash common.TransactionHash
 	var result map[string]interface{}
-	res, err := sender.SendPost(url, requestJSON)
-	if err == nil {
-		json.Unmarshal([]byte(res), &result)
-		txHash.TxId = fmt.Sprint(result["txId"])
+	res, err := sender.SendPost(_url, requestJSON)
+	if err != nil {
+		fmt.Println(err.Error())
+		return nil
 	}
+
+	err = json.Unmarshal([]byte(res), &result)
+	if err != nil {
+		fmt.Println(err)
+		return nil
+	}
+	txHash.TxId = fmt.Sprint(result["txId"])
+
 	return &txHash
 }
 
@@ -100,14 +108,20 @@ func (x *Xrp) XrpBroadcast(txData string, signatureId string) *common.Transactio
  * For more details, see <a href="https://tatum.io/apidoc#operation/XrpGetLastClosedLedger" target="_blank">Tatum API documentation</a>
  */
 func (x *Xrp) XrpGetCurrentLedger() uint64 {
-	url := "/v3/xrp/info"
-	res, err := sender.SendGet(url, nil)
+	_url := "/v3/xrp/info"
+	res, err := sender.SendGet(_url, nil)
 	if err != nil {
 		fmt.Println(err.Error())
 		return 0
 	}
+
 	var result map[string]interface{}
-	json.Unmarshal([]byte(res), &result)
+	err = json.Unmarshal([]byte(res), &result)
+	if err != nil {
+		fmt.Println(err.Error())
+		return 0
+	}
+
 	return uint64(result["ledger_index"].(float64))
 }
 
@@ -115,9 +129,9 @@ func (x *Xrp) XrpGetCurrentLedger() uint64 {
  * For more details, see <a href="https://tatum.io/apidoc#operation/XrpGetLedger" target="_blank">Tatum API documentation</a>
  */
 func (x *Xrp) XrpGetLedger(i uint64) string {
-	url := "/v3/xrp/ledger/" + strconv.FormatUint(i, 10)
-	fmt.Println(url)
-	res, err := sender.SendGet(url, nil)
+	_url := "/v3/xrp/ledger/" + strconv.FormatUint(i, 10)
+	fmt.Println(_url)
+	res, err := sender.SendGet(_url, nil)
 	if err != nil {
 		fmt.Println(err.Error())
 		return ""
@@ -129,18 +143,22 @@ func (x *Xrp) XrpGetLedger(i uint64) string {
  * For more details, see <a href="https://tatum.io/apidoc#operation/XrpGetAccountBalance" target="_blank">Tatum API documentation</a>
  */
 func (x *Xrp) xrpGetAccountBalance(address string) *big.Int {
-	url := "/v3/xrp/account/" + address + "/balance"
-	res, err := sender.SendGet(url, nil)
+	_url := "/v3/xrp/account/" + address + "/balance"
+	res, err := sender.SendGet(_url, nil)
 	if err != nil {
 		fmt.Println(err.Error())
 		return big.NewInt(0)
 	}
 
 	var result map[string]interface{}
-	json.Unmarshal([]byte(res), &result)
+	err = json.Unmarshal([]byte(res), &result)
+	if err != nil {
+		fmt.Println(err.Error())
+		return big.NewInt(0)
+	}
+
 	balance, ok := new(big.Int).SetString(result["balance"].(string), 10)
 	if !ok {
-		fmt.Println(err.Error())
 		return big.NewInt(0)
 	}
 	return balance
@@ -150,8 +168,8 @@ func (x *Xrp) xrpGetAccountBalance(address string) *big.Int {
  * For more details, see <a href="https://tatum.io/apidoc#operation/XrpGetTransaction" target="_blank">Tatum API documentation</a>
  */
 func (x *Xrp) xrpGetTransaction(hash string) string {
-	url := "/v3/xrp/transaction/" + hash
-	res, err := sender.SendGet(url, nil)
+	_url := "/v3/xrp/transaction/" + hash
+	res, err := sender.SendGet(_url, nil)
 	if err != nil {
 		fmt.Println(err.Error())
 		return ""
@@ -163,14 +181,14 @@ func (x *Xrp) xrpGetTransaction(hash string) string {
  * For more details, see <a href="https://tatum.io/apidoc#operation/XrpGetAccountTx" target="_blank">Tatum API documentation</a>
  */
 func (x *Xrp) XrpGetAccountTransactions(address string, min uint32, marker string) string {
-	url, _ := url.Parse("/v3/xrp/account/tx/" + address)
-	q := url.Query()
+	_url, _ := url.Parse("/v3/xrp/account/tx/" + address)
+	q := _url.Query()
 	q.Add("marker", marker)
 	q.Add("min", strconv.FormatUint(uint64(min), 10))
-	url.RawQuery = q.Encode()
-	fmt.Println(url.String())
+	_url.RawQuery = q.Encode()
+	fmt.Println(_url.String())
 
-	res, err := sender.SendGet(url.String(), nil)
+	res, err := sender.SendGet(_url.String(), nil)
 	if err != nil {
 		fmt.Println(err.Error())
 		return ""

@@ -18,15 +18,15 @@ type OrderBook struct {
  */
 func (o *OrderBook) GetHistoricalTrades(pageSize uint16, offset uint16) *[]ledger.OrderBookResponse {
 
-	url, _ := url.Parse("/v3/trade/history")
-	q := url.Query()
+	_url, _ := url.Parse("/v3/trade/history")
+	q := _url.Query()
 	q.Add("offset", strconv.FormatUint(uint64(offset), 10))
 	q.Add("pageSize", strconv.FormatUint(uint64(pageSize), 10))
-	url.RawQuery = q.Encode()
-	fmt.Println(url.String())
+	_url.RawQuery = q.Encode()
+	fmt.Println(_url.String())
 
 	var orderBooks []ledger.OrderBookResponse
-	res, err := sender.SendGet(url.String(), nil)
+	res, err := sender.SendGet(_url.String(), nil)
 	if err != nil {
 		fmt.Println(err.Error())
 		return nil
@@ -46,16 +46,16 @@ func (o *OrderBook) GetHistoricalTrades(pageSize uint16, offset uint16) *[]ledge
  */
 func (o *OrderBook) GetActiveBuyTrades(id string, pageSize uint16, offset uint16) *[]ledger.OrderBookResponse {
 
-	url, _ := url.Parse("/v3/trade/buy")
-	q := url.Query()
+	_url, _ := url.Parse("/v3/trade/buy")
+	q := _url.Query()
 	q.Add("id", id)
 	q.Add("offset", strconv.FormatUint(uint64(offset), 10))
 	q.Add("pageSize", strconv.FormatUint(uint64(pageSize), 10))
-	url.RawQuery = q.Encode()
-	fmt.Println(url.String())
+	_url.RawQuery = q.Encode()
+	fmt.Println(_url.String())
 
 	var orderBooks []ledger.OrderBookResponse
-	res, err := sender.SendGet(url.String(), nil)
+	res, err := sender.SendGet(_url.String(), nil)
 	if err != nil {
 		fmt.Println(err.Error())
 		return nil
@@ -75,16 +75,16 @@ func (o *OrderBook) GetActiveBuyTrades(id string, pageSize uint16, offset uint16
  */
 func (o *OrderBook) GetActiveSellTrades(id string, pageSize uint16, offset uint16) *[]ledger.OrderBookResponse {
 
-	url, _ := url.Parse("/v3/trade/sell")
-	q := url.Query()
+	_url, _ := url.Parse("/v3/trade/sell")
+	q := _url.Query()
 	q.Add("id", id)
 	q.Add("offset", strconv.FormatUint(uint64(offset), 10))
 	q.Add("pageSize", strconv.FormatUint(uint64(pageSize), 10))
-	url.RawQuery = q.Encode()
-	fmt.Println(url.String())
+	_url.RawQuery = q.Encode()
+	fmt.Println(_url.String())
 
 	var orderBooks []ledger.OrderBookResponse
-	res, err := sender.SendGet(url.String(), nil)
+	res, err := sender.SendGet(_url.String(), nil)
 	if err != nil {
 		fmt.Println(err.Error())
 		return nil
@@ -104,7 +104,7 @@ func (o *OrderBook) GetActiveSellTrades(id string, pageSize uint16, offset uint1
  */
 func (o *OrderBook) StoreTrade(data request.OrderBookRequest) *common.Id {
 
-	url, _ := url.Parse("/v3/trade")
+	_url, _ := url.Parse("/v3/trade")
 
 	requestJSON, err := json.Marshal(data)
 	if err != nil {
@@ -112,7 +112,7 @@ func (o *OrderBook) StoreTrade(data request.OrderBookRequest) *common.Id {
 		return nil
 	}
 
-	res, err := sender.SendPost(url.String(), requestJSON)
+	res, err := sender.SendPost(_url.String(), requestJSON)
 	if err != nil {
 		fmt.Println(err.Error())
 		return nil
@@ -133,10 +133,10 @@ func (o *OrderBook) StoreTrade(data request.OrderBookRequest) *common.Id {
  */
 func (o *OrderBook) GetTradeById(id string) *ledger.OrderBookResponse {
 
-	url, _ := url.Parse("/v3/trade/" + id)
+	_url, _ := url.Parse("/v3/trade/" + id)
 
 	var orderBook ledger.OrderBookResponse
-	res, err := sender.SendGet(url.String(), nil)
+	res, err := sender.SendGet(_url.String(), nil)
 	if err != nil {
 		fmt.Println(err.Error())
 		return nil
@@ -159,14 +159,20 @@ func (o *OrderBook) GetTradeById(id string) *ledger.OrderBookResponse {
  * For more details, see <a href="https://tatum.io/apidoc#operation/deleteTrade" target="_blank">Tatum API documentation</a>
  */
 func (o *OrderBook) DeleteTrade(id string) {
-	url, _ := url.Parse("/v3/trade/" + id)
-	sender.SendDel(url.String(), nil)
+	_url, _ := url.Parse("/v3/trade/" + id)
+	_, err := sender.SendDel(_url.String(), nil)
+	if err != nil {
+		fmt.Println(err)
+	}
 }
 
 /**
  * For more details, see <a href="https://tatum.io/apidoc#operation/deleteAccountTrades" target="_blank">Tatum API documentation</a>
  */
 func (o *OrderBook) DeleteAccountTrades(id string) {
-	url, _ := url.Parse("/v3/trade/" + id)
-	sender.SendDel(url.String(), nil)
+	_url, _ := url.Parse("/v3/trade/" + id)
+	_, err := sender.SendDel(_url.String(), nil)
+	if err != nil {
+		fmt.Println(err)
+	}
 }

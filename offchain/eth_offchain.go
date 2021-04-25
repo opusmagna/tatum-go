@@ -121,7 +121,7 @@ func (e *EthereumOffchain) SendEthOffchainTransaction(testnet bool, body request
 	feeInEther := new(big.Int).Div(feeInWei, big.NewInt(params.Ether))
 	withdrawal.Fee = feeInEther.String()
 
-	withdrawalResponse := OffchainStoreWithdrawal(*withdrawal)
+	withdrawalResponse := StoreWithdrawalOffchain(*withdrawal)
 	id := withdrawalResponse.Id
 
 	broadcastWithdrawal := request.BroadcastWithdrawal{}
@@ -129,9 +129,9 @@ func (e *EthereumOffchain) SendEthOffchainTransaction(testnet bool, body request
 	broadcastWithdrawal.WithdrawalId = id
 	broadcastWithdrawal.Currency = request.BTC.String()
 
-	txHash, err := OffchainBroadcast(broadcastWithdrawal)
+	txHash, err := BroadcastOffchain(broadcastWithdrawal)
 	if err != nil {
-		_, err1 := OffchainCancelWithdrawal(id, true)
+		_, err1 := CancelWithdrawalOffchain(id, true)
 		if err1 == nil {
 			return nil, err
 		}
@@ -236,7 +236,7 @@ func (e *EthereumOffchain) SendEthErc20OffchainTransaction(testnet bool, body re
 	feeInEther := new(big.Int).Div(feeInWei, big.NewInt(params.Ether))
 	withdrawal.Fee = feeInEther.String()
 
-	withdrawalResponse := OffchainStoreWithdrawal(*withdrawal)
+	withdrawalResponse := StoreWithdrawalOffchain(*withdrawal)
 	id := withdrawalResponse.Id
 
 	broadcastWithdrawal := request.BroadcastWithdrawal{}
@@ -244,9 +244,9 @@ func (e *EthereumOffchain) SendEthErc20OffchainTransaction(testnet bool, body re
 	broadcastWithdrawal.WithdrawalId = id
 	broadcastWithdrawal.Currency = request.BTC.String()
 
-	txHash, err := OffchainBroadcast(broadcastWithdrawal)
+	txHash, err := BroadcastOffchain(broadcastWithdrawal)
 	if err != nil {
-		_, err1 := OffchainCancelWithdrawal(id, true)
+		_, err1 := CancelWithdrawalOffchain(id, true)
 		if err1 == nil {
 			return nil, err
 		}

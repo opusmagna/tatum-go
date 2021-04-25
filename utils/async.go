@@ -38,11 +38,11 @@ func (a *Async) SendPut(url string, body []byte) (string, error) {
 
 	asyncResponse := <-asyncChan
 	defer asyncResponse.Body.Close()
-	bytes, _ := ioutil.ReadAll(asyncResponse.Body)
+	_bytes, _ := ioutil.ReadAll(asyncResponse.Body)
 
-	fmt.Println(string(bytes))
+	fmt.Println(string(_bytes))
 
-	return string(bytes), nil
+	return string(_bytes), nil
 }
 
 func put(url string, body []byte, rc chan *http.Response) error {
@@ -76,7 +76,7 @@ func (a *Async) SendDel(url string, body []byte) (string, error) {
 
 	errGrp, _ := errgroup.WithContext(context.Background())
 
-	errGrp.Go(func() error { return delete(requestUrl, body, asyncChan) })
+	errGrp.Go(func() error { return Delete(requestUrl, body, asyncChan) })
 
 	err := errGrp.Wait()
 	if err != nil {
@@ -87,14 +87,14 @@ func (a *Async) SendDel(url string, body []byte) (string, error) {
 
 	asyncResponse := <-asyncChan
 	defer asyncResponse.Body.Close()
-	bytes, _ := ioutil.ReadAll(asyncResponse.Body)
+	_bytes, _ := ioutil.ReadAll(asyncResponse.Body)
 
-	fmt.Println(string(bytes))
+	fmt.Println(string(_bytes))
 
-	return string(bytes), nil
+	return string(_bytes), nil
 }
 
-func delete(url string, body []byte, rc chan *http.Response) error {
+func Delete(url string, body []byte, rc chan *http.Response) error {
 
 	req, err := http.NewRequest("DELETE", url, bytes.NewReader(body))
 
@@ -136,13 +136,13 @@ func (a *Async) SendPost(url string, body []byte) (string, error) {
 
 	asyncResponse := <-asyncChan
 	defer asyncResponse.Body.Close()
-	bytes, _ := ioutil.ReadAll(asyncResponse.Body)
+	_bytes, _ := ioutil.ReadAll(asyncResponse.Body)
 
 	fmt.Println("============================")
-	fmt.Println(string(bytes))
+	fmt.Println(string(_bytes))
 	fmt.Println("============================")
 
-	return string(bytes), nil
+	return string(_bytes), nil
 }
 
 func post(url string, body []byte, rc chan *http.Response) error {
@@ -187,11 +187,11 @@ func (a *Async) SendGet(url string, body []byte) (string, error) {
 
 	asyncResponse := <-asyncChan
 	defer asyncResponse.Body.Close()
-	bytes, _ := ioutil.ReadAll(asyncResponse.Body)
+	_bytes, _ := ioutil.ReadAll(asyncResponse.Body)
 
-	fmt.Println(string(bytes))
+	fmt.Println(string(_bytes))
 
-	return string(bytes), nil
+	return string(_bytes), nil
 }
 
 func get(url string, body []byte, rc chan *http.Response) error {

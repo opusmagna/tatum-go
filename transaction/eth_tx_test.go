@@ -41,7 +41,7 @@ func TestEthTx_PrepareEthOrErc20SignedTransaction_Local(t *testing.T) {
 	eth := EthTx{}
 	tx, err := eth.PrepareEthOrErc20SignedTransaction(true, body, "")
 	if err != nil || tx == "" {
-		fmt.Println(err.Error())
+		fmt.Println(err)
 		t.Fail()
 	}
 	fmt.Println(tx)

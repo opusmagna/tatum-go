@@ -20,8 +20,8 @@ type CustomerLedger struct {
  */
 func (c *CustomerLedger) GetCustomer(id string) *ledger.Customer {
 
-	url := strings.Join([]string{"/v3/ledger/customer", id}, "/")
-	res, err := sender.SendGet(url, nil)
+	_url := strings.Join([]string{"/v3/ledger/customer", id}, "/")
+	res, err := sender.SendGet(_url, nil)
 	if err != nil {
 		fmt.Println(err.Error())
 		return nil
@@ -40,15 +40,15 @@ func (c *CustomerLedger) GetCustomer(id string) *ledger.Customer {
  */
 func (c *CustomerLedger) GetAllCustomers(pageSize uint16, offset uint16) *[]ledger.Customer {
 
-	url, _ := url.Parse("/v3/ledger/customer")
-	q := url.Query()
+	_url, _ := url.Parse("/v3/ledger/customer")
+	q := _url.Query()
 	q.Add("offset", strconv.FormatUint(uint64(offset), 10))
 	q.Add("pageSize", strconv.FormatUint(uint64(pageSize), 10))
-	url.RawQuery = q.Encode()
-	fmt.Println(url.String())
+	_url.RawQuery = q.Encode()
+	fmt.Println(_url.String())
 
 	var customers []ledger.Customer
-	res, err := sender.SendGet(url.String(), nil)
+	res, err := sender.SendGet(_url.String(), nil)
 	if err != nil {
 		fmt.Println(err.Error())
 		return nil
@@ -77,7 +77,7 @@ func (c *CustomerLedger) UpdateCustomer(id string, data request.CustomerUpdate) 
 		return nil
 	}
 
-	url, _ := url.Parse("/v3/ledger/customer/" + id)
+	_url, _ := url.Parse("/v3/ledger/customer/" + id)
 
 	requestJSON, err := json.Marshal(data)
 	if err != nil {
@@ -85,7 +85,7 @@ func (c *CustomerLedger) UpdateCustomer(id string, data request.CustomerUpdate) 
 		return nil
 	}
 
-	res, err := sender.SendPut(url.String(), requestJSON)
+	res, err := sender.SendPut(_url.String(), requestJSON)
 	if err != nil {
 		fmt.Println(err.Error())
 		return nil
@@ -105,30 +105,42 @@ func (c *CustomerLedger) UpdateCustomer(id string, data request.CustomerUpdate) 
  * For more details, see <a href="https://tatum.io/apidoc#operation/activateAccount" target="_blank">Tatum API documentation</a>
  */
 func (c *CustomerLedger) ActivateCustomer(id string) {
-	url, _ := url.Parse("/v3/ledger/customer/" + id + "/activate")
-	sender.SendPut(url.String(), nil)
+	_url, _ := url.Parse("/v3/ledger/customer/" + id + "/activate")
+	_, err := sender.SendPut(_url.String(), nil)
+	if err != nil {
+		fmt.Println(err)
+	}
 }
 
 /**
  * For more details, see <a href="https://tatum.io/apidoc#operation/deactivateCustomer" target="_blank">Tatum API documentation</a>
  */
 func (c *CustomerLedger) DeactivateCustomer(id string) {
-	url, _ := url.Parse("/v3/ledger/customer/" + id + "/deactivate")
-	sender.SendPut(url.String(), nil)
+	_url, _ := url.Parse("/v3/ledger/customer/" + id + "/deactivate")
+	_, err := sender.SendPut(_url.String(), nil)
+	if err != nil {
+		fmt.Println(err)
+	}
 }
 
 /**
  * For more details, see <a href="https://tatum.io/apidoc#operation/enableCustomer" target="_blank">Tatum API documentation</a>
  */
 func (c *CustomerLedger) EnableCustomer(id string) {
-	url, _ := url.Parse("/v3/ledger/customer/" + id + "/enable")
-	sender.SendPut(url.String(), nil)
+	_url, _ := url.Parse("/v3/ledger/customer/" + id + "/enable")
+	_, err := sender.SendPut(_url.String(), nil)
+	if err != nil {
+		fmt.Println(err)
+	}
 }
 
 /**
  * For more details, see <a href="https://tatum.io/apidoc#operation/disableCustomer" target="_blank">Tatum API documentation</a>
  */
 func (c *CustomerLedger) DisableCustomer(id string) {
-	url, _ := url.Parse("/v3/ledger/customer/" + id + "/disable")
-	sender.SendPut(url.String(), nil)
+	_url, _ := url.Parse("/v3/ledger/customer/" + id + "/disable")
+	_, err := sender.SendPut(_url.String(), nil)
+	if err != nil {
+		fmt.Println(err)
+	}
 }

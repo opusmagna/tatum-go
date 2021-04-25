@@ -16,9 +16,9 @@ type VC struct {
  */
 func (v *VC) GetVirtualCurrencyByName(name string) *ledger.VC {
 
-	url, _ := url.Parse("/v3/ledger/virtualCurrency/" + name)
+	_url, _ := url.Parse("/v3/ledger/virtualCurrency/" + name)
 	var vc ledger.VC
-	res, err := sender.SendGet(url.String(), nil)
+	res, err := sender.SendGet(_url.String(), nil)
 	if err != nil {
 		fmt.Println(err.Error())
 		return nil
@@ -38,7 +38,7 @@ func (v *VC) GetVirtualCurrencyByName(name string) *ledger.VC {
  */
 func (v *VC) CreateVirtualCurrency(data request.CreateCurrency) *ledger.Account {
 	//await validateOrReject(data);
-	url := "/v3/ledger/virtualCurrency"
+	_url := "/v3/ledger/virtualCurrency"
 
 	requestJSON, err := json.Marshal(data)
 	if err != nil {
@@ -47,7 +47,7 @@ func (v *VC) CreateVirtualCurrency(data request.CreateCurrency) *ledger.Account 
 	}
 
 	var acc ledger.Account
-	res, err := sender.SendPost(url, requestJSON)
+	res, err := sender.SendPost(_url, requestJSON)
 	if err == nil {
 		err = json.Unmarshal([]byte(res), &acc)
 	}
@@ -66,7 +66,7 @@ func (v *VC) CreateVirtualCurrency(data request.CreateCurrency) *ledger.Account 
 func (v *VC) UpdateVirtualCurrency(data request.UpdateCurrency) {
 	//await validateOrReject(data);
 
-	url := "/v3/ledger/virtualCurrency"
+	_url := "/v3/ledger/virtualCurrency"
 
 	requestJSON, err := json.Marshal(data)
 	if err != nil {
@@ -74,7 +74,10 @@ func (v *VC) UpdateVirtualCurrency(data request.UpdateCurrency) {
 		return
 	}
 
-	sender.SendPut(url, requestJSON)
+	_, err = sender.SendPut(_url, requestJSON)
+	if err != nil {
+		fmt.Println(err)
+	}
 }
 
 /**
@@ -82,7 +85,7 @@ func (v *VC) UpdateVirtualCurrency(data request.UpdateCurrency) {
  */
 func (v *VC) MintVirtualCurrency(data request.CurrencyOperation) *ledger.Reference {
 	//await validateOrReject(data);
-	url := "/v3/ledger/virtualCurrency/mint"
+	_url := "/v3/ledger/virtualCurrency/mint"
 
 	requestJSON, err := json.Marshal(data)
 	if err != nil {
@@ -91,7 +94,7 @@ func (v *VC) MintVirtualCurrency(data request.CurrencyOperation) *ledger.Referen
 	}
 
 	var ref ledger.Reference
-	res, err := sender.SendPost(url, requestJSON)
+	res, err := sender.SendPost(_url, requestJSON)
 	if err == nil {
 		err = json.Unmarshal([]byte(res), &ref)
 	}
@@ -109,7 +112,7 @@ func (v *VC) MintVirtualCurrency(data request.CurrencyOperation) *ledger.Referen
  */
 func (v *VC) RevokeVirtualCurrency(data request.CurrencyOperation) *ledger.Reference {
 	//await validateOrReject(data);
-	url := "/v3/ledger/virtualCurrency/revoke"
+	_url := "/v3/ledger/virtualCurrency/revoke"
 
 	requestJSON, err := json.Marshal(data)
 	if err != nil {
@@ -118,7 +121,7 @@ func (v *VC) RevokeVirtualCurrency(data request.CurrencyOperation) *ledger.Refer
 	}
 
 	var ref ledger.Reference
-	res, err := sender.SendPost(url, requestJSON)
+	res, err := sender.SendPost(_url, requestJSON)
 	if err == nil {
 		err = json.Unmarshal([]byte(res), &ref)
 	}

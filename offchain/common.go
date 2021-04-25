@@ -72,5 +72,5 @@ func OffchainBroadcast(data request.BroadcastWithdrawal) (*common.TxHash, error)
 		return nil, err
 	}
 
-	return &txHash
+	return &txHash, nil
 }

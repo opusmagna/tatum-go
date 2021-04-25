@@ -7,7 +7,7 @@ import (
 	"github.com/go-playground/validator"
 	"github.com/tatumio/tatum-go/model/request"
 	"github.com/tatumio/tatum-go/model/response/offchain"
-	"github.com/tatumio/tatum-go/transaction/bitcoin_tx_builder"
+	"github.com/tatumio/tatum-go/transaction"
 	"github.com/tatumio/tatum-go/wallet"
 	"strconv"
 	"strings"
@@ -68,10 +68,12 @@ func (b *BitcoinOffchain) SendBitcoinOffchainTransaction(testnet bool, body requ
 
 	txHash, err := OffchainBroadcast(broadcastWithdrawal)
 	if err != nil {
-		OffchainCancelWithdrawal(id, true)
-		return nil, err
+		_, err1 := OffchainCancelWithdrawal(id, true)
+		if err1 == nil {
+			return nil, err
+		}
+		return &offchain.BroadcastResult{TxHash: nil, Id: id}, nil
 	}
-
 	return &offchain.BroadcastResult{TxHash: txHash, Id: id}, nil
 
 }
@@ -100,7 +102,7 @@ func (b *BitcoinOffchain) PrepareBitcoinSignedOffchainTransaction(testnet bool, 
 	}
 
 	var (
-		txBuilder = bitcoin_tx_builder.New().Init(network)
+		txBuilder = transaction.New().Init(network)
 	)
 
 	if len(multipleAmounts) > 0 {

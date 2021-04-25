@@ -17,7 +17,6 @@ import (
 	"github.com/tatumio/tatum-go/ledger"
 	"github.com/tatumio/tatum-go/model/request"
 	"github.com/tatumio/tatum-go/model/response/offchain"
-	"github.com/tatumio/tatum-go/transaction"
 	"github.com/tatumio/tatum-go/utils"
 	"github.com/tatumio/tatum-go/wallet"
 	"golang.org/x/crypto/sha3"
@@ -93,7 +92,7 @@ func (e *EthereumOffchain) SendEthOffchainTransaction(testnet bool, body request
 
 		gasPrice = new(big.Int).Mul(gasPrice, big.NewInt(params.GWei)) // GWei to Wei
 	} else {
-		gasPrice = transaction.EthGetGasPriceInWei()
+		gasPrice = utils.EthGetGasPriceInWei()
 	}
 
 	var accountLedger = ledger.AccountLedger{}
@@ -203,7 +202,7 @@ func (e *EthereumOffchain) SendEthErc20OffchainTransaction(testnet bool, body re
 
 		gasPrice = new(big.Int).Mul(gasPrice, big.NewInt(params.GWei)) // GWei to Wei
 	} else {
-		gasPrice = transaction.EthGetGasPriceInWei()
+		gasPrice = utils.EthGetGasPriceInWei()
 	}
 
 	var accountLedger = ledger.AccountLedger{}
@@ -319,7 +318,7 @@ func (e *EthereumOffchain) PrepareEthSignedOffchainTransaction(testnet bool, amo
 		return "", 0, err
 	}
 
-	rawTx, err := createRawTransaction(testnet, client, privateKey, nonce, to, value, gasLimit, _gasPrice, data)
+	rawTx, err := createRawTransaction(testnet, privateKey, nonce, to, value, gasLimit, _gasPrice, data)
 	if err != nil {
 		return "", 0, err
 	}
@@ -378,7 +377,7 @@ func (e *EthereumOffchain) PrepareEthErc20SignedOffchainTransaction(testnet bool
 		return "", 0, errors.New("invalid gas price")
 	}
 
-	rawTx, err := createRawTransaction(testnet, client, privateKey, nonce, to, value, gasLimit, _gasPrice, data)
+	rawTx, err := createRawTransaction(testnet, privateKey, nonce, to, value, gasLimit, _gasPrice, data)
 	if err != nil {
 		return "", 0, err
 	}
@@ -386,7 +385,7 @@ func (e *EthereumOffchain) PrepareEthErc20SignedOffchainTransaction(testnet bool
 	return rawTx, gasLimit, nil
 }
 
-func createRawTransaction(testnet bool, client *ethclient.Client, prv string,
+func createRawTransaction(testnet bool, prv string,
 	nonce uint64, to common.Address, amount *big.Int, gasLimit uint64, gasPrice *big.Int, data []byte) (string, error) {
 
 	privateKey, err := crypto.HexToECDSA(strings.Replace(prv, "0x", "", 1))

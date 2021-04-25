@@ -4,7 +4,6 @@ import (
 	"context"
 	"crypto/ecdsa"
 	"encoding/hex"
-	"encoding/json"
 	"fmt"
 	"github.com/ethereum/go-ethereum"
 	"github.com/ethereum/go-ethereum/common"
@@ -13,7 +12,6 @@ import (
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
-	"github.com/ethereum/go-ethereum/params"
 	"github.com/ethereum/go-ethereum/rlp"
 	"github.com/go-playground/validator"
 	"github.com/tatumio/tatum-go/blockchain"
@@ -22,42 +20,14 @@ import (
 	response "github.com/tatumio/tatum-go/model/response/common"
 	"github.com/tatumio/tatum-go/utils"
 	"golang.org/x/crypto/sha3"
-	"io/ioutil"
 	"log"
 	"math/big"
-	"net/http"
 	"os"
 	"strconv"
 	"strings"
 )
 
 type EthTx struct {
-}
-
-/**
- * Estimate Gas price for the transaction.
- * @param client
- */
-func EthGetGasPriceInWei() *big.Int {
-	var result map[string]interface{}
-	res, err := http.Get("https://ethgasstation.info/json/ethgasAPI.json")
-	if err != nil {
-		return nil
-	}
-
-	bytes, _ := ioutil.ReadAll(res.Body)
-	fmt.Println(string(bytes))
-	err = json.Unmarshal(bytes, &result)
-	if err != nil {
-		return nil
-	}
-
-	data, err := strconv.Atoi(fmt.Sprint(result["fast"]))
-	if err != nil {
-		return nil
-	}
-	inGWei := new(big.Int).Div(big.NewInt(int64(data)), big.NewInt(10))
-	return new(big.Int).Mul(inGWei, big.NewInt(params.GWei)) // GWei to Wei
 }
 
 /**
@@ -117,7 +87,7 @@ func (b *EthTx) PrepareStoreDataTransaction(testnet bool, body request.CreateRec
 	}
 
 	gasLimit := uint64(len(body.Data)*68 + 21000)
-	gasPrice := EthGetGasPriceInWei()
+	gasPrice := utils.EthGetGasPriceInWei()
 
 	return createRawTransaction(client, body.FromPrivateKey, body.Nonce, address, big.NewInt(0), gasLimit, gasPrice, []byte(body.Data))
 }
@@ -368,7 +338,7 @@ func getGasPriceAndGasLimit(client *ethclient.Client, fee *request.Fee, to commo
 			return nil, 0, err
 		}
 	} else {
-		gasPrice = EthGetGasPriceInWei()
+		gasPrice = utils.EthGetGasPriceInWei()
 	}
 
 	if fee != nil {

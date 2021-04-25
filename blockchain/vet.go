@@ -107,9 +107,7 @@ func (v *Vet) VetGetBlock(hash string) *vet.VetBlock {
 	}
 
 	var block vet.VetBlock
-	if err == nil {
-		err = json.Unmarshal([]byte(res), &block)
-	}
+	err = json.Unmarshal([]byte(res), &block)
 
 	if err != nil {
 		fmt.Println(err.Error())
@@ -174,9 +172,7 @@ func (v *Vet) VetGetTransaction(hash string) *vet.Tx {
 	}
 
 	var tx vet.Tx
-	if err == nil {
-		err = json.Unmarshal([]byte(res), &tx)
-	}
+	err = json.Unmarshal([]byte(res), &tx)
 
 	if err != nil {
 		fmt.Println(err.Error())
@@ -199,9 +195,7 @@ func (v *Vet) VetGetTransactionReceipt(hash string) *vet.VetTxReceipt {
 	}
 
 	var receipt vet.VetTxReceipt
-	if err == nil {
-		err = json.Unmarshal([]byte(res), &receipt)
-	}
+	err = json.Unmarshal([]byte(res), &receipt)
 
 	if err != nil {
 		fmt.Println(err.Error())

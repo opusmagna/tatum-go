@@ -28,20 +28,21 @@ func GetExchangeRate(currency string, basePair common.Fiat) *common.Rate {
 
 	if _, ok := request.Currency(currency).IsValid(); !ok {
 		if _, ok := common.Fiat(currency).IsValid(); !ok {
-			fmt.Errorf("invalid currencry or fiat")
+			fmt.Println("invalid currencry or fiat")
+			return nil
 		}
 	}
 
-	url, _ := url.Parse("/v3/tatum/rate/" + currency)
-	q := url.Query()
+	_url, _ := url.Parse("/v3/tatum/rate/" + currency)
+	q := _url.Query()
 	q.Add("basePair", string(basePair))
-	url.RawQuery = q.Encode()
-	fmt.Println(url.String())
+	_url.RawQuery = q.Encode()
+	fmt.Println(_url.String())
 
 	var rate common.Rate
-	res, err := sender.SendGet(url.String(), nil)
+	res, err := sender.SendGet(_url.String(), nil)
 	if err != nil {
-		fmt.Println(err.Error())
+		fmt.Println(err)
 		return nil
 	}
 

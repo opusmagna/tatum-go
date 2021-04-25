@@ -8,7 +8,7 @@ import (
 	"github.com/tatumio/tatum-go/model/request"
 	"github.com/tatumio/tatum-go/model/response/offchain"
 	"github.com/tatumio/tatum-go/network/ltc"
-	"github.com/tatumio/tatum-go/transaction"
+	"github.com/tatumio/tatum-go/transaction/bitcoin_tx_builder"
 	"github.com/tatumio/tatum-go/wallet"
 	"strconv"
 	"strings"
@@ -40,7 +40,7 @@ func (l *LitecoinOffchain) SendLitecoinOffchainTransaction(testnet bool, body re
 		withdrawal.Fee = "0.0005"
 	}
 
-	withdrawalResponse := OffchainStoreWithdrawal(*withdrawal)
+	withdrawalResponse := StoreWithdrawalOffchain(*withdrawal)
 	id := withdrawalResponse.Id
 
 	txData, err := l.PrepareLitecoinSignedOffchainTransaction(testnet,
@@ -53,7 +53,7 @@ func (l *LitecoinOffchain) SendLitecoinOffchainTransaction(testnet bool, body re
 		withdrawal.MultipleAmounts)
 
 	if err != nil {
-		OffchainCancelWithdrawal(id, true)
+		_, _ = CancelWithdrawalOffchain(id, true)
 		return nil, err
 	}
 
@@ -62,9 +62,9 @@ func (l *LitecoinOffchain) SendLitecoinOffchainTransaction(testnet bool, body re
 	broadcastWithdrawal.WithdrawalId = id
 	broadcastWithdrawal.Currency = request.BTC.String()
 
-	txHash, err := OffchainBroadcast(broadcastWithdrawal)
+	txHash, err := BroadcastOffchain(broadcastWithdrawal)
 	if err != nil {
-		_, err1 := OffchainCancelWithdrawal(id, true)
+		_, err1 := CancelWithdrawalOffchain(id, true)
 		if err1 == nil {
 			return nil, err
 		}
@@ -98,7 +98,7 @@ func (l *LitecoinOffchain) PrepareLitecoinSignedOffchainTransaction(testnet bool
 	}
 
 	var (
-		txBuilder = transaction.New().Init(network)
+		txBuilder = bitcoin_tx_builder.New().Init(network)
 	)
 
 	if len(multipleAmounts) > 0 {

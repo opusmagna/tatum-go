@@ -14,13 +14,13 @@ import (
  */
 func GetTransactionKMS(id string) *kms.TransactionKMS {
 
-	url, _ := url.Parse("/v3/kms/" + id)
-	q := url.Query()
-	url.RawQuery = q.Encode()
-	fmt.Println(url.String())
+	_url, _ := url.Parse("/v3/kms/" + id)
+	q := _url.Query()
+	_url.RawQuery = q.Encode()
+	fmt.Println(_url.String())
 
 	var tx kms.TransactionKMS
-	res, err := sender.SendGet(url.String(), nil)
+	res, err := sender.SendGet(_url.String(), nil)
 	if err != nil {
 		fmt.Println(err.Error())
 		return nil
@@ -39,16 +39,22 @@ func GetTransactionKMS(id string) *kms.TransactionKMS {
  * For more details, see <a href="https://tatum.io/apidoc#operation/DeletePendingTransactionToSign" target="_blank">Tatum API documentation</a>
  */
 func DeleteTransactionKMS(id string, revert bool) {
-	url, _ := url.Parse("/v3/kms/" + id + "/" + strconv.FormatBool(revert))
-	sender.SendDel(url.String(), nil)
+	_url, _ := url.Parse("/v3/kms/" + id + "/" + strconv.FormatBool(revert))
+	_, err := sender.SendDel(_url.String(), nil)
+	if err != nil {
+		fmt.Println(err)
+	}
 }
 
 /**
  * For more details, see <a href="https://tatum.io/apidoc#operation/CompletePendingSignature" target="_blank">Tatum API documentation</a>
  */
 func CompletePendingTransactionKMS(id string, txId string) {
-	url, _ := url.Parse("/v3/kms/" + id + "/" + txId)
-	sender.SendPut(url.String(), nil)
+	_url, _ := url.Parse("/v3/kms/" + id + "/" + txId)
+	_, err := sender.SendPut(_url.String(), nil)
+	if err != nil {
+		fmt.Println(err)
+	}
 }
 
 /**
@@ -56,13 +62,13 @@ func CompletePendingTransactionKMS(id string, txId string) {
  */
 func GetPendingTransactionsKMSByChain(chain request.Currency) *[]kms.TransactionKMS {
 
-	url, _ := url.Parse("/v3/kms/pending/" + chain.String())
-	q := url.Query()
-	url.RawQuery = q.Encode()
-	fmt.Println(url.String())
+	_url, _ := url.Parse("/v3/kms/pending/" + chain.String())
+	q := _url.Query()
+	_url.RawQuery = q.Encode()
+	fmt.Println(_url.String())
 
 	var txs []kms.TransactionKMS
-	res, err := sender.SendGet(url.String(), nil)
+	res, err := sender.SendGet(_url.String(), nil)
 	if err != nil {
 		fmt.Println(err.Error())
 		return nil

@@ -27,11 +27,11 @@ func (s *Subcription) CreateNewSubscription(data request.CreateSubscription) *co
 		xType.String() != "request.SubscriptionAttrIncomingBlockchainTx" &&
 		xType.String() != "request.SubscriptionAttrCompleteBlockchainTx" {
 
-		fmt.Errorf("wrong type of attribute")
+		fmt.Println("wrong type of attribute")
 		return &idRes
 	}
 
-	url, _ := url.Parse("/v3/subscription")
+	_url, _ := url.Parse("/v3/subscription")
 
 	requestJSON, err := json.Marshal(data)
 	if err != nil {
@@ -39,7 +39,7 @@ func (s *Subcription) CreateNewSubscription(data request.CreateSubscription) *co
 		return nil
 	}
 
-	res, err := sender.SendPost(url.String(), requestJSON)
+	res, err := sender.SendPost(_url.String(), requestJSON)
 	if err != nil {
 		fmt.Println(err.Error())
 		return nil
@@ -59,15 +59,15 @@ func (s *Subcription) CreateNewSubscription(data request.CreateSubscription) *co
  */
 func (s *Subcription) ListActiveSubscriptions(pageSize uint16, offset uint16) *[]ledger.Subscription {
 
-	url, _ := url.Parse("/v3/subscription")
-	q := url.Query()
+	_url, _ := url.Parse("/v3/subscription")
+	q := _url.Query()
 	q.Add("offset", strconv.FormatUint(uint64(offset), 10))
 	q.Add("pageSize", strconv.FormatUint(uint64(pageSize), 10))
-	url.RawQuery = q.Encode()
-	fmt.Println(url.String())
+	_url.RawQuery = q.Encode()
+	fmt.Println(_url.String())
 
 	var subs []ledger.Subscription
-	res, err := sender.SendGet(url.String(), nil)
+	res, err := sender.SendGet(_url.String(), nil)
 	if err != nil {
 		fmt.Println(err.Error())
 		return nil
@@ -86,8 +86,11 @@ func (s *Subcription) ListActiveSubscriptions(pageSize uint16, offset uint16) *[
  * For more details, see <a href="https://tatum.io/apidoc#operation/deleteSubscription" target="_blank">Tatum API documentation</a>
  */
 func (s *Subcription) CancelExistingSubscription(id string) {
-	url, _ := url.Parse("/v3/subscription/" + id)
-	sender.SendDel(url.String(), nil)
+	_url, _ := url.Parse("/v3/subscription/" + id)
+	_, err := sender.SendDel(_url.String(), nil)
+	if err != nil {
+		fmt.Println(err)
+	}
 }
 
 /**
@@ -95,9 +98,9 @@ func (s *Subcription) CancelExistingSubscription(id string) {
  */
 func (s *Subcription) ObtainReportForSubscription(id string) interface{} {
 
-	url, _ := url.Parse("/v3/subscription/report" + id)
+	_url, _ := url.Parse("/v3/subscription/report" + id)
 
-	res, err := sender.SendGet(url.String(), nil)
+	res, err := sender.SendGet(_url.String(), nil)
 	if err != nil {
 		fmt.Println(err.Error())
 		return nil

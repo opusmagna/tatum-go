@@ -15,12 +15,12 @@ var sender = &utils.Async{}
  */
 func CheckMaliciousAddress(address string) *common.Status {
 
-	url, _ := url.Parse("/v3/security/address/" + address)
-	q := url.Query()
-	url.RawQuery = q.Encode()
+	_url, _ := url.Parse("/v3/security/address/" + address)
+	q := _url.Query()
+	_url.RawQuery = q.Encode()
 
 	var status common.Status
-	res, err := sender.SendGet(url.String(), nil)
+	res, err := sender.SendGet(_url.String(), nil)
 	if err != nil {
 		fmt.Println(err.Error())
 		return nil

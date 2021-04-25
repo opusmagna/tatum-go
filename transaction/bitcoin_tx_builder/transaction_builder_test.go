@@ -14,7 +14,7 @@ func TestTransaction_ToHex_MainNet(t *testing.T) {
 	tx := builder.Sign()
 
 	if tx == nil {
-		fmt.Errorf("error")
+		fmt.Println("error")
 	}
 
 	//fmt.Println(tx.ToHex())
@@ -32,7 +32,7 @@ func TestTransaction_ToHex_TestNet(t *testing.T) {
 	tx := builder.Sign()
 
 	if tx == nil {
-		fmt.Errorf("error")
+		fmt.Println("error")
 	}
 
 	//fmt.Println(tx.ToHex())

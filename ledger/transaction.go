@@ -17,9 +17,9 @@ type Transaction struct {
  * For more details, see <a href="https://tatum.io/apidoc#operation/getTransactionsByReference" target="_blank">Tatum API documentation</a>
  */
 func (t *Transaction) GetTransactionsByReference(reference string) *[]ledger.Transaction {
-	url, _ := url.Parse("/v3/ledger/transaction/reference/" + reference)
+	_url, _ := url.Parse("/v3/ledger/transaction/reference/" + reference)
 
-	res, err := sender.SendGet(url.String(), nil)
+	res, err := sender.SendGet(_url.String(), nil)
 	if err != nil {
 		fmt.Println(err.Error())
 		return nil
@@ -49,7 +49,7 @@ func (t *Transaction) StoreTransaction(transaction request.CreateTransaction) *l
 		return nil
 	}
 
-	url, _ := url.Parse("/v3/ledger/transaction")
+	_url, _ := url.Parse("/v3/ledger/transaction")
 
 	requestJSON, err := json.Marshal(transaction)
 	if err != nil {
@@ -57,7 +57,7 @@ func (t *Transaction) StoreTransaction(transaction request.CreateTransaction) *l
 		return nil
 	}
 
-	res, err := sender.SendPost(url.String(), requestJSON)
+	res, err := sender.SendPost(_url.String(), requestJSON)
 	if err != nil {
 		fmt.Println(err.Error())
 		return nil
@@ -170,12 +170,12 @@ func (t *Transaction) CountTransactionsByLedger(filter request.TransactionFilter
 }
 
 func getTransactions(urlStr string, filter request.TransactionFilter, pageSize uint16, offset uint16) *[]ledger.Transaction {
-	url, _ := url.Parse(urlStr)
-	q := url.Query()
+	_url, _ := url.Parse(urlStr)
+	q := _url.Query()
 	q.Add("offset", strconv.FormatUint(uint64(offset), 10))
 	q.Add("pageSize", strconv.FormatUint(uint64(pageSize), 10))
-	url.RawQuery = q.Encode()
-	fmt.Println(url.String())
+	_url.RawQuery = q.Encode()
+	fmt.Println(_url.String())
 
 	requestJSON, err := json.Marshal(filter)
 	if err != nil {
@@ -183,7 +183,7 @@ func getTransactions(urlStr string, filter request.TransactionFilter, pageSize u
 		return nil
 	}
 
-	res, err := sender.SendPost(url.String(), requestJSON)
+	res, err := sender.SendPost(_url.String(), requestJSON)
 	if err != nil {
 		fmt.Println(err.Error())
 		return nil

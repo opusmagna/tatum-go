@@ -16,8 +16,8 @@ var sender = &utils.Async{}
 /**
  * For more details, see <a href="https://tatum.io/apidoc#operation/storeWithdrawal" target="_blank">Tatum API documentation</a>
  */
-func OffchainStoreWithdrawal(data request.CreateWithdrawal) *offchain.WithdrawalResponse {
-	url := "/v3/offchain/withdrawal"
+func StoreWithdrawalOffchain(data request.CreateWithdrawal) *offchain.WithdrawalResponse {
+	_url := "/v3/offchain/withdrawal"
 
 	requestJSON, err := json.Marshal(data)
 	if err != nil {
@@ -27,7 +27,7 @@ func OffchainStoreWithdrawal(data request.CreateWithdrawal) *offchain.Withdrawal
 	fmt.Println(string(requestJSON))
 
 	withdrawal := offchain.WithdrawalResponse{}
-	res, err := sender.SendPost(url, requestJSON)
+	res, err := sender.SendPost(_url, requestJSON)
 	if err == nil {
 		err = json.Unmarshal([]byte(res), &withdrawal)
 	}
@@ -43,16 +43,16 @@ func OffchainStoreWithdrawal(data request.CreateWithdrawal) *offchain.Withdrawal
 /**
  * For more details, see <a href="https://tatum.io/apidoc#operation/cancelInProgressWithdrawal" target="_blank">Tatum API documentation</a>
  */
-func OffchainCancelWithdrawal(id string, revert bool) (string, error) {
-	url, _ := url.Parse("/v3/offchain/withdrawal/" + id + "?revert=" + strconv.FormatBool(revert))
-	return sender.SendDel(url.String(), nil)
+func CancelWithdrawalOffchain(id string, revert bool) (string, error) {
+	_url, _ := url.Parse("/v3/offchain/withdrawal/" + id + "?revert=" + strconv.FormatBool(revert))
+	return sender.SendDel(_url.String(), nil)
 }
 
 /**
  * For more details, see <a href="https://tatum.io/apidoc#operation/broadcastBlockchainTransaction" target="_blank">Tatum API documentation</a>
  */
-func OffchainBroadcast(data request.BroadcastWithdrawal) (*common.TxHash, error) {
-	url := "/v3/offchain/withdrawal/broadcast"
+func BroadcastOffchain(data request.BroadcastWithdrawal) (*common.TxHash, error) {
+	_url := "/v3/offchain/withdrawal/broadcast"
 
 	requestJSON, err := json.Marshal(data)
 	if err != nil {
@@ -62,7 +62,7 @@ func OffchainBroadcast(data request.BroadcastWithdrawal) (*common.TxHash, error)
 	fmt.Println(string(requestJSON))
 
 	txHash := common.TxHash{}
-	res, err := sender.SendPost(url, requestJSON)
+	res, err := sender.SendPost(_url, requestJSON)
 	if err == nil {
 		err = json.Unmarshal([]byte(res), &txHash)
 	}

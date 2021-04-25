@@ -16,15 +16,15 @@ var sender = &utils.Async{}
  */
 func GetLogRecord(chain request.Currency, id string) *common.Rate {
 
-	url, _ := url.Parse("/v3/record")
-	q := url.Query()
+	_url, _ := url.Parse("/v3/record")
+	q := _url.Query()
 	q.Add("chain", string(chain))
 	q.Add("id", id)
-	url.RawQuery = q.Encode()
-	fmt.Println(url.String())
+	_url.RawQuery = q.Encode()
+	fmt.Println(_url.String())
 
 	var rate common.Rate
-	res, err := sender.SendGet(url.String(), nil)
+	res, err := sender.SendGet(_url.String(), nil)
 	if err != nil {
 		fmt.Println(err.Error())
 		return nil

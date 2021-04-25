@@ -16,8 +16,6 @@ import (
 	"sync"
 )
 
-var sender = &utils.Async{}
-
 func (b *BitcoinTx) prepareBitcoinCashSignedTransaction(testnet bool, body request.TransferBchBlockchain) (string, error) {
 	validate = validator.New()
 	err := validate.Struct(body)
@@ -93,7 +91,10 @@ func getTransactions(txHash []string) []bch.Tx {
 	var tx bch.Tx
 	for msg := range c {
 		fmt.Println(msg)
-		json.Unmarshal([]byte(msg), &tx)
+		err := json.Unmarshal([]byte(msg), &tx)
+		if err != nil {
+			return nil
+		}
 		txs = append(txs, tx)
 	}
 

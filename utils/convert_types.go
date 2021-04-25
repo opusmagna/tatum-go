@@ -621,7 +621,7 @@ func TimeValue(v *time.Time) time.Time {
 // representing seconds since Epoch or time.Time{} if the pointer is nil.
 func SecondsTimeValue(v *int64) time.Time {
 	if v != nil {
-		return time.Unix((*v / 1000), 0)
+		return time.Unix(*v/1000, 0)
 	}
 	return time.Time{}
 }
@@ -630,7 +630,7 @@ func SecondsTimeValue(v *int64) time.Time {
 // representing milliseconds sinch Epoch or time.Time{} if the pointer is nil.
 func MillisecondsTimeValue(v *int64) time.Time {
 	if v != nil {
-		return time.Unix(0, (*v * 1000000))
+		return time.Unix(0, *v*1000000)
 	}
 	return time.Time{}
 }

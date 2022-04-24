@@ -3,14 +3,15 @@ package offchain
 import (
 	"errors"
 	"fmt"
-	"github.com/btcsuite/btcd/chaincfg"
-	"github.com/go-playground/validator"
-	"github.com/tatumio/tatum-go/model/request"
-	"github.com/tatumio/tatum-go/model/response/offchain"
-	"github.com/tatumio/tatum-go/transaction/bitcoin_tx_builder"
-	"github.com/tatumio/tatum-go/wallet"
 	"strconv"
 	"strings"
+
+	"github.com/btcsuite/btcd/chaincfg"
+	"github.com/go-playground/validator"
+	"github.com/opusmagna/tatum-go/model/request"
+	"github.com/opusmagna/tatum-go/model/response/offchain"
+	"github.com/opusmagna/tatum-go/transaction/bitcoin_tx_builder"
+	"github.com/opusmagna/tatum-go/wallet"
 )
 
 type BitcoinOffchain struct {

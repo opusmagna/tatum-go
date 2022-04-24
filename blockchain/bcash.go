@@ -3,11 +3,12 @@ package blockchain
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/tatumio/tatum-go/model/response/bch"
-	"github.com/tatumio/tatum-go/model/response/common"
 	"net/url"
 	"strconv"
 	"strings"
+
+	"github.com/opusmagna/tatum-go/model/response/bch"
+	"github.com/opusmagna/tatum-go/model/response/common"
 )
 
 type Bcash struct {

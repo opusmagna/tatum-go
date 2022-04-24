@@ -3,9 +3,10 @@ package blockchain
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/tatumio/tatum-go/model/response/common"
-	"github.com/tatumio/tatum-go/model/response/xlm"
 	"strconv"
+
+	"github.com/opusmagna/tatum-go/model/response/common"
+	"github.com/opusmagna/tatum-go/model/response/xlm"
 )
 
 type Xlm struct {

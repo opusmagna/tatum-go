@@ -2,9 +2,10 @@ package tatum
 
 import (
 	"fmt"
-	"github.com/tatumio/tatum-go/model/request"
-	"github.com/tatumio/tatum-go/model/response/common"
 	"testing"
+
+	"github.com/opusmagna/tatum-go/model/request"
+	"github.com/opusmagna/tatum-go/model/response/common"
 )
 
 func TestGetExchangeRate(t *testing.T) {

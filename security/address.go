@@ -3,9 +3,10 @@ package security
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/tatumio/tatum-go/model/response/common"
-	"github.com/tatumio/tatum-go/utils"
 	"net/url"
+
+	"github.com/opusmagna/tatum-go/model/response/common"
+	"github.com/opusmagna/tatum-go/utils"
 )
 
 var sender = &utils.Async{}

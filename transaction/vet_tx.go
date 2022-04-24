@@ -4,16 +4,17 @@ import (
 	"encoding/hex"
 	"errors"
 	"fmt"
+	"math/big"
+	"strconv"
+
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/rlp"
 	"github.com/go-playground/validator"
-	"github.com/tatumio/tatum-go/blockchain"
-	"github.com/tatumio/tatum-go/model/request"
-	"github.com/tatumio/tatum-go/model/response/common"
+	"github.com/opusmagna/tatum-go/blockchain"
+	"github.com/opusmagna/tatum-go/model/request"
+	"github.com/opusmagna/tatum-go/model/response/common"
 	"github.com/vechain/thor/thor"
 	"github.com/vechain/thor/tx"
-	"math/big"
-	"strconv"
 )
 
 type VetTx struct {

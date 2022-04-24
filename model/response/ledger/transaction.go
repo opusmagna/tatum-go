@@ -1,6 +1,6 @@
 package ledger
 
-import "github.com/tatumio/tatum-go/model/response/common"
+import "github.com/opusmagna/tatum-go/model/response/common"
 
 /**
  *

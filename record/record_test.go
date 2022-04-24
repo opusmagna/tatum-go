@@ -2,8 +2,9 @@ package record
 
 import (
 	"fmt"
-	"github.com/tatumio/tatum-go/model/request"
 	"testing"
+
+	"github.com/opusmagna/tatum-go/model/request"
 )
 
 func TestGetLogRecord(t *testing.T) {

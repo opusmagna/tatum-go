@@ -3,13 +3,14 @@ package private_key
 import (
 	"encoding/hex"
 	"fmt"
-	"github.com/btcsuite/btcd/chaincfg"
-	"github.com/btcsuite/btcutil"
-	btc "github.com/btcsuite/btcutil/hdkeychain"
-	"github.com/tatumio/tatum-go/utils"
 	"regexp"
 	"strconv"
 	"strings"
+
+	"github.com/btcsuite/btcd/btcutil"
+	btc "github.com/btcsuite/btcd/btcutil/hdkeychain"
+	"github.com/btcsuite/btcd/chaincfg"
+	"github.com/opusmagna/tatum-go/utils"
 )
 
 type BtcPrivateKey interface {

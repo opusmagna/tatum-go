@@ -2,18 +2,20 @@ package wallet
 
 import (
 	"fmt"
+
+	"github.com/btcsuite/btcd/btcutil"
+	"github.com/btcsuite/btcd/btcutil/hdkeychain"
 	"github.com/btcsuite/btcd/chaincfg"
-	"github.com/btcsuite/btcutil"
-	"github.com/btcsuite/btcutil/hdkeychain"
+	bch "github.com/gcash/bchd/chaincfg"
+
 	"github.com/ethereum/go-ethereum/common/hexutil"
 	"github.com/ethereum/go-ethereum/crypto"
-	bch "github.com/gcash/bchd/chaincfg"
 	bchkeychain "github.com/gcash/bchutil/hdkeychain"
-	"github.com/tatumio/tatum-go/model/request"
-	"github.com/tatumio/tatum-go/network/ltc"
-	"github.com/tatumio/tatum-go/private_key"
-	"github.com/tatumio/tatum-go/utils"
-	"golang.org/x/crypto/sha3"
+	"github.com/opusmagna/tatum-go/model/request"
+	"github.com/opusmagna/tatum-go/network/ltc"
+	"github.com/opusmagna/tatum-go/private_key"
+	"github.com/opusmagna/tatum-go/utils"
+	sha3 "golang.org/x/crypto/sha3"
 )
 
 /**

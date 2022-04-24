@@ -3,10 +3,10 @@ package wallet
 import (
 	"github.com/btcsuite/btcd/chaincfg"
 	bch "github.com/gcash/bchd/chaincfg"
-	"github.com/tatumio/tatum-go/model/request"
-	"github.com/tatumio/tatum-go/network/ltc"
-	"github.com/tatumio/tatum-go/private_key"
-	"github.com/tatumio/tatum-go/utils"
+	"github.com/opusmagna/tatum-go/model/request"
+	"github.com/opusmagna/tatum-go/network/ltc"
+	"github.com/opusmagna/tatum-go/private_key"
+	"github.com/opusmagna/tatum-go/utils"
 )
 
 type Wallet struct {

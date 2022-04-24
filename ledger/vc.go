@@ -3,9 +3,10 @@ package ledger
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/tatumio/tatum-go/model/request"
-	"github.com/tatumio/tatum-go/model/response/ledger"
 	"net/url"
+
+	"github.com/opusmagna/tatum-go/model/request"
+	"github.com/opusmagna/tatum-go/model/response/ledger"
 )
 
 type VC struct {

@@ -2,10 +2,11 @@ package ledger
 
 import (
 	"fmt"
-	"github.com/stretchr/testify/assert"
-	"github.com/tatumio/tatum-go/model/request"
-	"github.com/tatumio/tatum-go/model/response/common"
 	"testing"
+
+	"github.com/opusmagna/tatum-go/model/request"
+	"github.com/opusmagna/tatum-go/model/response/common"
+	"github.com/stretchr/testify/assert"
 )
 
 const (

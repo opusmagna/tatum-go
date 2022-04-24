@@ -1,9 +1,10 @@
 package wallet
 
 import (
-	"github.com/stretchr/testify/assert"
-	"github.com/tatumio/tatum-go/model/request"
 	"testing"
+
+	"github.com/opusmagna/tatum-go/model/request"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestGenerateWallet_BTC(t *testing.T) {

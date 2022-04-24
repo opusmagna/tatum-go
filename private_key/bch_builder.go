@@ -2,13 +2,14 @@ package private_key
 
 import (
 	"fmt"
-	"github.com/gcash/bchd/chaincfg"
-	"github.com/gcash/bchutil"
-	"github.com/gcash/bchutil/hdkeychain"
-	"github.com/tatumio/tatum-go/utils"
 	"regexp"
 	"strconv"
 	"strings"
+
+	"github.com/gcash/bchd/chaincfg"
+	"github.com/gcash/bchutil"
+	"github.com/gcash/bchutil/hdkeychain"
+	"github.com/opusmagna/tatum-go/utils"
 )
 
 type BchPrivateKey interface {

@@ -3,11 +3,12 @@ package blockchain
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/shopspring/decimal"
-	"github.com/tatumio/tatum-go/model/response/common"
-	"github.com/tatumio/tatum-go/model/response/eth"
 	"net/url"
 	"strconv"
+
+	internalCommon "github.com/opusmagna/tatum-go/model/response/common"
+	"github.com/opusmagna/tatum-go/model/response/eth"
+	"github.com/shopspring/decimal"
 )
 
 type Ethereum struct {
@@ -16,7 +17,7 @@ type Ethereum struct {
 /**
  * For more details, see <a href="https://tatum.io/apidoc#operation/EthBroadcast" target="_blank">Tatum API documentation</a>
  */
-func (e *Ethereum) EthBroadcast(txData string, signatureId string) *common.TransactionHash {
+func (e *Ethereum) EthBroadcast(txData string, signatureId string) *internalCommon.TransactionHash {
 	_url := "/v3/ethereum/broadcast"
 
 	payload := make(map[string]interface{})
@@ -32,7 +33,7 @@ func (e *Ethereum) EthBroadcast(txData string, signatureId string) *common.Trans
 	}
 	fmt.Println(string(requestJSON))
 
-	txHash := common.TransactionHash{}
+	txHash := internalCommon.TransactionHash{}
 	var result map[string]interface{}
 	res, err := sender.SendPost(_url, requestJSON)
 	if err != nil {
@@ -138,14 +139,14 @@ func (e *Ethereum) EthGetAccountBalance(address string) decimal.Decimal {
 /**
  * For more details, see <a href="https://tatum.io/apidoc#operation/EthErc20GetBalance" target="_blank">Tatum API documentation</a>
  */
-func (e *Ethereum) EthGetAccountErc20Address(address string, contractAddress string) *common.Balance {
+func (e *Ethereum) EthGetAccountErc20Address(address string, contractAddress string) *internalCommon.Balance {
 	_url, _ := url.Parse("/v3/ethereum/account/balance/erc20/" + address)
 	q := _url.Query()
 	q.Add("contractAddress", contractAddress)
 	_url.RawQuery = q.Encode()
 	fmt.Println(_url.String())
 
-	var balance common.Balance
+	var balance internalCommon.Balance
 	res, err := sender.SendGet(_url.String(), nil)
 	if err != nil {
 		fmt.Println(err.Error())

@@ -1,8 +1,8 @@
 package kms
 
 import (
-	"github.com/tatumio/tatum-go/model/request"
-	"github.com/tatumio/tatum-go/model/response/offchain"
+	"github.com/opusmagna/tatum-go/model/request"
+	"github.com/opusmagna/tatum-go/model/response/offchain"
 )
 
 type TransactionKMS struct {

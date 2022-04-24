@@ -3,11 +3,12 @@ package blockchain
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/go-playground/validator"
-	"github.com/tatumio/tatum-go/model/request"
-	"github.com/tatumio/tatum-go/model/response/common"
-	"github.com/tatumio/tatum-go/model/response/vet"
 	"strconv"
+
+	"github.com/go-playground/validator"
+	"github.com/opusmagna/tatum-go/model/request"
+	"github.com/opusmagna/tatum-go/model/response/common"
+	"github.com/opusmagna/tatum-go/model/response/vet"
 )
 
 type Vet struct {

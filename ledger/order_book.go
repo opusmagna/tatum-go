@@ -3,11 +3,12 @@ package ledger
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/tatumio/tatum-go/model/request"
-	"github.com/tatumio/tatum-go/model/response/common"
-	"github.com/tatumio/tatum-go/model/response/ledger"
 	"net/url"
 	"strconv"
+
+	"github.com/opusmagna/tatum-go/model/request"
+	"github.com/opusmagna/tatum-go/model/response/common"
+	"github.com/opusmagna/tatum-go/model/response/ledger"
 )
 
 type OrderBook struct {

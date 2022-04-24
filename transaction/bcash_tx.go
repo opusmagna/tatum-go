@@ -3,17 +3,18 @@ package transaction
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/btcsuite/btcutil"
-	bchcfg "github.com/gcash/bchd/chaincfg"
-	"github.com/go-playground/validator"
-	"github.com/tatumio/tatum-go/model/request"
-	"github.com/tatumio/tatum-go/model/response/bch"
-	"github.com/tatumio/tatum-go/transaction/bcash_tx_builder"
-	"github.com/tatumio/tatum-go/utils"
 	"io/ioutil"
 	"net/http"
 	"os"
 	"sync"
+
+	"github.com/btcsuite/btcd/btcutil"
+	bchcfg "github.com/gcash/bchd/chaincfg"
+	"github.com/go-playground/validator"
+	"github.com/opusmagna/tatum-go/model/request"
+	"github.com/opusmagna/tatum-go/model/response/bch"
+	"github.com/opusmagna/tatum-go/transaction/bcash_tx_builder"
+	"github.com/opusmagna/tatum-go/utils"
 )
 
 func (b *BitcoinTx) prepareBitcoinCashSignedTransaction(testnet bool, body request.TransferBchBlockchain) (string, error) {

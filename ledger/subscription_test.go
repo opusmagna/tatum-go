@@ -2,9 +2,10 @@ package ledger
 
 import (
 	"fmt"
-	"github.com/tatumio/tatum-go/model/request"
-	"github.com/tatumio/tatum-go/model/response/common"
 	"testing"
+
+	"github.com/opusmagna/tatum-go/model/request"
+	"github.com/opusmagna/tatum-go/model/response/common"
 )
 
 var sub = Subcription{}

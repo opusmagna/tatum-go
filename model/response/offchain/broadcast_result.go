@@ -1,6 +1,6 @@
 package offchain
 
-import "github.com/tatumio/tatum-go/model/response/common"
+import "github.com/opusmagna/tatum-go/model/response/common"
 
 type BroadcastResult struct {
 	TxHash *common.TxHash

@@ -1,7 +1,7 @@
 package request
 
 import (
-	"github.com/tatumio/tatum-go/model/response/common"
+	"github.com/opusmagna/tatum-go/model/response/common"
 )
 
 type TransactionFilter struct {

@@ -2,9 +2,10 @@ package blockchain
 
 import (
 	"fmt"
-	"github.com/stretchr/testify/assert"
-	"github.com/tatumio/tatum-go/model/response/btc"
 	"testing"
+
+	"github.com/opusmagna/tatum-go/model/response/btc"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestBtcBroadcast(t *testing.T) {

@@ -3,14 +3,15 @@ package offchain
 import (
 	"errors"
 	"fmt"
-	bch "github.com/gcash/bchd/chaincfg"
-	"github.com/go-playground/validator"
-	"github.com/tatumio/tatum-go/model/request"
-	"github.com/tatumio/tatum-go/model/response/offchain"
-	"github.com/tatumio/tatum-go/transaction/bcash_tx_builder"
-	"github.com/tatumio/tatum-go/wallet"
 	"strconv"
 	"strings"
+
+	chaincfg "github.com/gcash/bchd/chaincfg"
+	"github.com/go-playground/validator"
+	"github.com/opusmagna/tatum-go/model/request"
+	"github.com/opusmagna/tatum-go/model/response/offchain"
+	"github.com/opusmagna/tatum-go/transaction/bcash_tx_builder"
+	"github.com/opusmagna/tatum-go/wallet"
 )
 
 type BcashOffchain struct {
@@ -89,15 +90,15 @@ func (bc *BcashOffchain) PrepareBitcoinCashSignedOffchainTransaction(testnet boo
 	amount string, address string, mnemonic string, keyPair []request.KeyPair,
 	changeAddress string, multipleAmounts []string) (string, error) {
 
-	var network *bch.Params
+	var network chaincfg.Params
 	if testnet {
-		network = &bch.TestNet3Params
+		network = chaincfg.TestNet3Params
 	} else {
-		network = &bch.MainNetParams
+		network = chaincfg.MainNetParams
 	}
 
 	var (
-		txBuilder = bcash_tx_builder.New().Init(network)
+		txBuilder = bcash_tx_builder.New().Init(&network)
 	)
 
 	if len(multipleAmounts) > 0 {

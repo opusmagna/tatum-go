@@ -2,10 +2,11 @@ package blockchain
 
 import (
 	"fmt"
-	"github.com/stretchr/testify/assert"
-	"github.com/tatumio/tatum-go/model/request"
 	"math/big"
 	"testing"
+
+	"github.com/opusmagna/tatum-go/model/request"
+	"github.com/stretchr/testify/assert"
 )
 
 var vetchain = Vet{}

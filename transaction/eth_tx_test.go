@@ -3,12 +3,14 @@ package transaction
 import (
 	"encoding/hex"
 	"fmt"
+	"log"
+	"math/big"
+	"testing"
+
 	"github.com/davecgh/go-spew/spew"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/rlp"
-	"github.com/tatumio/tatum-go/model/request"
-	"log"
-	"testing"
+	"github.com/opusmagna/tatum-go/model/request"
 )
 
 func TestEthTx_PrepareStoreDataTransaction(t *testing.T) {
@@ -53,7 +55,9 @@ func TestEthTx_PrepareEthOrErc20SignedTransaction_Local(t *testing.T) {
 	rlp.DecodeBytes(rawTxBytes, &_tx)
 	spew.Dump(_tx)
 
-	msg, err := _tx.AsMessage(types.HomesteadSigner{})
+	msg, err := _tx.AsMessage(types.HomesteadSigner{
+		FrontierSigner: types.FrontierSigner{},
+	}, big.NewInt(10))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -75,7 +79,9 @@ func TestEthTx_RawTransaction_Java(t *testing.T) {
 	rlp.DecodeBytes(rawTxBytes, &tx)
 	spew.Dump(tx)
 
-	msg, err := tx.AsMessage(types.HomesteadSigner{})
+	msg, err := tx.AsMessage(types.HomesteadSigner{
+		FrontierSigner: types.FrontierSigner{},
+	}, big.NewInt(10))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -97,7 +103,7 @@ func TestEthTx_RawTransaction_JS(t *testing.T) {
 	rlp.DecodeBytes(rawTxBytes, &tx)
 	spew.Dump(tx)
 
-	msg, err := tx.AsMessage(types.HomesteadSigner{})
+	msg, err := tx.AsMessage(types.HomesteadSigner{}, big.NewInt(10))
 	if err != nil {
 		log.Fatal(err)
 	}

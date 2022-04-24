@@ -3,10 +3,11 @@ package security
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/tatumio/tatum-go/model/request"
-	"github.com/tatumio/tatum-go/model/response/kms"
 	"net/url"
 	"strconv"
+
+	"github.com/opusmagna/tatum-go/model/request"
+	"github.com/opusmagna/tatum-go/model/response/kms"
 )
 
 /**

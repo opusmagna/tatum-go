@@ -2,9 +2,10 @@ package transaction
 
 import (
 	"fmt"
-	"github.com/stretchr/testify/assert"
-	"github.com/tatumio/tatum-go/model/request"
 	"testing"
+
+	"github.com/opusmagna/tatum-go/model/request"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestBitcoinTx_PrepareBitcoinSignedTransaction(t *testing.T) {

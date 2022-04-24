@@ -2,9 +2,10 @@ package private_key
 
 import (
 	"crypto/sha512"
-	"github.com/tatumio/tatum-go/utils"
-	"golang.org/x/crypto/pbkdf2"
 	"strings"
+
+	"github.com/opusmagna/tatum-go/utils"
+	"golang.org/x/crypto/pbkdf2"
 )
 
 /**

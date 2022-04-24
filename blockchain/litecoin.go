@@ -3,11 +3,12 @@ package blockchain
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/tatumio/tatum-go/model/response/common"
-	"github.com/tatumio/tatum-go/model/response/ltc"
 	"net/url"
 	"strconv"
 	"strings"
+
+	"github.com/opusmagna/tatum-go/model/response/common"
+	"github.com/opusmagna/tatum-go/model/response/ltc"
 )
 
 type Litecoin struct {

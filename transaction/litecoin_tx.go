@@ -2,13 +2,14 @@ package transaction
 
 import (
 	"fmt"
+
+	"github.com/btcsuite/btcd/btcutil"
 	"github.com/btcsuite/btcd/chaincfg"
-	"github.com/btcsuite/btcutil"
 	"github.com/go-playground/validator"
-	"github.com/tatumio/tatum-go/blockchain"
-	"github.com/tatumio/tatum-go/model/request"
-	"github.com/tatumio/tatum-go/model/response/common"
-	"github.com/tatumio/tatum-go/transaction/bitcoin_tx_builder"
+	"github.com/opusmagna/tatum-go/blockchain"
+	"github.com/opusmagna/tatum-go/model/request"
+	"github.com/opusmagna/tatum-go/model/response/common"
+	"github.com/opusmagna/tatum-go/transaction/bitcoin_tx_builder"
 )
 
 type LitecoinTx struct {

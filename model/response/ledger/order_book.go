@@ -1,6 +1,6 @@
 package ledger
 
-import "github.com/tatumio/tatum-go/model/request"
+import "github.com/opusmagna/tatum-go/model/request"
 
 type OrderBookResponse struct {
 

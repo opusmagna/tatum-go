@@ -2,8 +2,9 @@ package ledger
 
 import (
 	"fmt"
-	"github.com/tatumio/tatum-go/model/request"
 	"testing"
+
+	"github.com/opusmagna/tatum-go/model/request"
 )
 
 var tx = Transaction{}

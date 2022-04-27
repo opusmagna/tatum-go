@@ -9,9 +9,9 @@ import (
 
 /*
  */
-func CreateNewDepositAddress(accountId string, index int) (*r.Address, error) {
+func CreateNewDepositAddress(accountId string) (*r.Address, error) {
 
-	_url := fmt.Sprintf("/v3/offchain/%s/address?index=%v", accountId, index)
+	_url := fmt.Sprintf("/v3/offchain/%s/address", accountId)
 
 	var res string
 	var body []byte

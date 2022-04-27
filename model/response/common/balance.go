@@ -1,6 +1,6 @@
 package common
 
-import "github.com/shopspring/decimal"
+import decimal "github.com/shopspring/decimal"
 
 type Balance struct {
 	Balance decimal.Decimal

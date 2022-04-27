@@ -2,8 +2,7 @@ module github.com/opusmagna/tatum-go
 
 go 1.18
 
-// replace github.com/btcsuite/btcd v0.18.1 => github.com/gcash/btcd v0.18.1
-// replace github.com/ethereum/go-ethereum/crypto v1.10.17 => golang.org/x/crypto v0.0.0-20220411220226-7b82a4e95df4
+
 
 require github.com/go-playground/validator v9.31.0+incompatible
 
@@ -18,6 +17,7 @@ require (
 	github.com/go-stack/stack v1.8.0 // indirect
 	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/shirou/gopsutil v3.21.4-0.20210419000835-c7a38de76ee5+incompatible // indirect
+	github.com/shopspring/decimal v1.3.1 // indirect
 	github.com/tklauser/go-sysconf v0.3.5 // indirect
 	github.com/tklauser/numcpus v0.2.2 // indirect
 	golang.org/x/sys v0.0.0-20210816183151-1e6c022a8912 // indirect

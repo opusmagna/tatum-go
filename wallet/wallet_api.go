@@ -50,5 +50,5 @@ func (wapi *WalletApi) GenerateWallet(mnemonic string) (*Wallet, error) {
 }
 
 func (wapi *WalletApi) setUrl(mnemonic string) string {
-	return fmt.Sprintf("%v/%v?mnemonic=%v", wapi.BasePath, "wallet", mnemonic)
+	return fmt.Sprintf("/v3/%v/%v?mnemonic=%v", wapi.BasePath, "wallet", mnemonic)
 }

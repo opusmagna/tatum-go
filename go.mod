@@ -3,8 +3,6 @@ module github.com/opusmagna/tatum-go
 go 1.18
 
 require (
-	github.com/btcsuite/btcd v0.22.1
-	github.com/btcsuite/btcd/chaincfg/chainhash v1.0.1
 	github.com/ethereum/go-ethereum v1.10.17
 	github.com/go-playground/validator v9.31.0+incompatible
 	github.com/shopspring/decimal v1.3.1

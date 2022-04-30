@@ -5,6 +5,8 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/opusmagna/tatum-go/model/request"
+	"github.com/opusmagna/tatum-go/model/response"
 	"github.com/opusmagna/tatum-go/utils"
 )
 
@@ -34,6 +36,31 @@ func GetInstance(slug string) (*WalletApi, error) {
 	return &WalletApi{
 		BasePath: key,
 	}, nil
+}
+
+func (wapi *WalletApi) GetPrivateKeyForWallet(mnemonic string, index int) (*response.WalletPrivateKeyResponse, error) {
+
+	url := wapi.setUrl(mnemonic)
+
+	body := request.WalletPrivateKeyRequest{
+		Mnemonic: mnemonic,
+		Index:    index,
+	}
+
+	bodyAsByte, err := json.Marshal(body)
+	if err != nil {
+		return nil, err
+	}
+
+	res, err := sender.SendPost(url, bodyAsByte)
+
+	var privateKey response.WalletPrivateKeyResponse
+	err = json.Unmarshal([]byte(res), &privateKey)
+	if err != nil {
+		return nil, err
+	}
+
+	return &privateKey, nil
 }
 
 func (wapi *WalletApi) GenerateWallet(mnemonic string) (*Wallet, error) {

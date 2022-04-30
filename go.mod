@@ -22,10 +22,10 @@ require (
 	github.com/tklauser/numcpus v0.2.2 // indirect
 	golang.org/x/sys v0.0.0-20210816183151-1e6c022a8912 // indirect
 	gopkg.in/natefinch/npipe.v2 v2.0.0-20160621034901-c1b8fa8bdcce // indirect
+	github.com/btcsuite/btcd v0.22.0-beta
 )
 
 require (
-	github.com/btcsuite/btcd v0.22.0-beta.0.20220111032746-97732e52810c
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/dchest/siphash v1.2.2 // indirect
 	github.com/gcash/bchd v0.18.1 // indirect
@@ -37,7 +37,7 @@ require (
 require (
 	github.com/btcsuite/btcd/btcutil v1.1.1
 	github.com/btcsuite/btcutil v1.0.2
-	github.com/ethereum/go-ethereum v1.10.17
+	github.com/ethereum/go-ethereum v1.10.16
 	github.com/gcash/bchutil v0.0.0-20210113190856-6ea28dff4000
 	github.com/go-playground/locales v0.14.0 // indirect
 	github.com/go-playground/universal-translator v0.18.0 // indirect

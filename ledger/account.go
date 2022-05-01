@@ -42,7 +42,7 @@ func (a *AccountLedger) GetAccountById(id string) *ledger.Account {
 /**
  * For more details, see <a href="https://tatum.io/apidoc#operation/createAccount" target="_blank">Tatum API documentation</a>
  */
-func (a *AccountLedger) CreateAccount(account request.CreateAccount) *ledger.Account {
+func (a *AccountLedger) CreateAccount(account request.CreateAccount) (*ledger.Account, error) {
 	validate = validator.New()
 	err := validate.Struct(account)
 	if err != nil {
@@ -50,7 +50,7 @@ func (a *AccountLedger) CreateAccount(account request.CreateAccount) *ledger.Acc
 			fmt.Println(err.Field() + ": should have " + err.Tag() + " " + err.Param())
 			fmt.Println(err.Value())
 		}
-		return nil
+		return nil, err
 	}
 
 	_url := "/v3/ledger/account"
@@ -58,7 +58,7 @@ func (a *AccountLedger) CreateAccount(account request.CreateAccount) *ledger.Acc
 	requestJSON, err := json.Marshal(account)
 	if err != nil {
 		fmt.Println(err.Error())
-		return nil
+		return nil, err
 	}
 	fmt.Println(string(requestJSON))
 	var accLedger ledger.Account
@@ -69,10 +69,10 @@ func (a *AccountLedger) CreateAccount(account request.CreateAccount) *ledger.Acc
 
 	if err != nil {
 		fmt.Println(err.Error())
-		return nil
+		return nil, err
 	}
 
-	return &accLedger
+	return &accLedger, nil
 }
 
 /**

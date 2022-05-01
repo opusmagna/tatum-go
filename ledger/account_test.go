@@ -19,7 +19,7 @@ func TestCreateAccount(t *testing.T) {
 	createAccount := request.CreateAccount{}
 	createAccount.Currency = "ETH"
 
-	account := accountLedger.CreateAccount(createAccount)
+	account, _ := accountLedger.CreateAccount(createAccount)
 	assert.Equal(t, "ETH", account.Currency, "they should be equal")
 	assert.NotNil(t, account, "it should not be empty")
 	assert.NotNil(t, account.Id, "it should not be empty")
@@ -29,7 +29,7 @@ func TestCreateAccountWrongCurrency(t *testing.T) {
 	createAccount := request.CreateAccount{}
 	createAccount.Currency = "E"
 
-	account := accountLedger.CreateAccount(createAccount)
+	account, _ := accountLedger.CreateAccount(createAccount)
 	assert.Nil(t, account, "it should be empty")
 }
 
@@ -39,7 +39,7 @@ func TestCreateAccountWrongExternalId(t *testing.T) {
 
 	createAccount.Customer = &request.CustomerUpdate{}
 
-	account := accountLedger.CreateAccount(createAccount)
+	account, _ := accountLedger.CreateAccount(createAccount)
 	assert.Nil(t, account, "it should be empty")
 }
 
@@ -55,7 +55,7 @@ func TestCreateAccountExternalId(t *testing.T) {
 		ProviderCountry:    request.SZ,
 		ExternalId:         "externalid123456"}
 
-	account := accountLedger.CreateAccount(createAccount)
+	account, _ := accountLedger.CreateAccount(createAccount)
 	assert.Equal(t, "ETH", account.Currency, "they should be equal")
 	assert.NotNil(t, account, "it should not be empty")
 	assert.NotNil(t, account.Id, "it should not be empty")

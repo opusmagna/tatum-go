@@ -14,7 +14,7 @@ var sender = &utils.Async{}
  */
 func CreateNewDepositAddress(accountId string) (*r.Address, error) {
 
-	_url := fmt.Sprintf("/v3/offchain/%s/address", accountId)
+	_url := fmt.Sprintf("/v3/offchain/account/%s/address", accountId)
 
 	var res string
 	var body []byte

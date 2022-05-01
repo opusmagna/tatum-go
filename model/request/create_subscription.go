@@ -18,8 +18,8 @@ type SubscriptionAttrTxHistoryReport struct {
 }
 
 type SubscriptionAttrIncomingBlockchainTx struct {
-	Id  string
-	Url string
+	Id  string `json:"id"`
+	Url string `json:"url"`
 }
 
 type SubscriptionAttrCompleteBlockchainTx struct {
